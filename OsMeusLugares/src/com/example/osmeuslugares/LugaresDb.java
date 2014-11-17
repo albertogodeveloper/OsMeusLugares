@@ -4,6 +4,7 @@ import java.util.Vector;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -11,14 +12,12 @@ import android.util.Log;
 
 public class LugaresDb extends SQLiteOpenHelper {
 
-	// variables estáticas
-	private static String LOGTAG = "LugaresDb";// mandar a registro de log
-	private SQLiteDatabase db;// creamos esto para no llamarlo en insertar
-								// lugares prueba
-	private static String nombre = "LugaresDb";// nombre que le damos a la base
-												// de datos
+	private static String LOGTAG = "LugaresDb";
+	private SQLiteDatabase db;
+	private static String nombre = "lugares.db";
 	private static CursorFactory factory = null;
 	private static int version = 1;
+
 	public static final int C_ID = 0;
 	public static final int C_NOMBRE = 1;
 	public static final int C_CATEGORIA_ID = 2;
@@ -31,64 +30,72 @@ public class LugaresDb extends SQLiteOpenHelper {
 
 	public LugaresDb(Context context) {
 		super(context, nombre, factory, version);
+		// TODO Auto-generated constructor stub
 	}
 
 	@Override
-	// on create solo se ejecuta cuando la base de datos no existe si se mete
-	// más inserciones
-	// tenemos que borrar y ejecutar otra vez. Hacer método a parte para poner
-	// más datos en bd
 	public void onCreate(SQLiteDatabase db) {
+		// TODO Auto-generated method stub
 		this.db = db;
+		try {
+			String sql = "CREATE TABLE lugar("
+					+ "_id INTEGER PRIMARY KEY AUTOINCREMENT, "
+					+ "nombre TEXT NOT NULL, "
+					+ "categoria_id INTEGER NOT NULL," + "direccion TEXT,"
+					+ "ciudad TEXT," + "telefono TEXT, " + "url TEXT,"
+					+ "comentario TEXT);";
 
-		// lanzar creación de la tabla
-		Log.i(LugaresDb.LOGTAG, "Creando base de datos....");
-		// creamos tabla lugar
-		String sql = "CREATE TABLE Lugar("
-				+ " _id INTEGER PRIMARY KEY AUTOINCREMENT,"
-				+ " nombre TEXT NOT NULL, "
-				+ " categoria_id INTEGER NOT NULL, " + " direccion TEXT, "
-				+ " ciudad TEXT, " + " telefono INTEGER, " + " url TEXT, "
-				+ " comentario TEXT);";
+			db.execSQL(sql);
 
-		Log.i(LugaresDb.LOGTAG, sql);
+			sql = "CREATE UNIQUE INDEX nombre_lugar ON Lugar(nombre ASC)";
+			db.execSQL(sql);
 
-		db.execSQL(sql);// ejecutamos el sql
-		sql = "CREATE UNIQUE INDEX nombre ON lugar(nombre ASC)";// crear indice
-																// por nombre
-		db.execSQL(sql);
+			sql = "CREATE TABLE Categoria("
+					+ "_id INTEGER PRIMARY KEY AUTOINCREMENT, "
+					+ "nombre TEXT NOT NULL);";
 
-		Log.i(LugaresDb.LOGTAG, "Base de datos creada");
+			db.execSQL(sql);
 
-		// datos de prueba
-		insertarDatosPrueba();
+			sql = "CREATE UNIQUE INDEX nombre_categoria ON Categoria(nombre ASC)";
+			db.execSQL(sql);
+			// Insertar datos de prueba
+			insertarLugaresPrueba();
+		} catch (SQLException e) {
+			Log.e(getClass().toString(), e.getMessage());
+		}
 
 	}
 
-	private void insertarDatosPrueba() {
+	private void insertarLugaresPrueba() {
+		db.execSQL("INSERT INTO Categoria(nombre) " + "VALUES('Playas')");
+		db.execSQL("INSERT INTO Categoria(nombre) " + "VALUES('Restaurantes')");
+		db.execSQL("INSERT INTO Categoria(nombre) " + "VALUES('Hoteles')");
+		db.execSQL("INSERT INTO Categoria(nombre) " + "VALUES('Otros')");
 
-		db.execSQL("INSERT INTO Lugar(nombre, categoria, direccion, ciudad, telefono, url, comentario) "
+		db.execSQL("INSERT INTO Lugar(nombre, categoria_id, direccion, ciudad, telefono, url, comentario) "
 				+ "VALUES('Playa Riazor',1, 'Riazor','A Coru–a','981000000','','')");
-		db.execSQL("INSERT INTO Lugar(nombre, categoria, direccion, ciudad, telefono, url, comentario) "
+		db.execSQL("INSERT INTO Lugar(nombre, categoria_id, direccion, ciudad, telefono, url, comentario) "
 				+ "VALUES('Playa Orzan',1, 'Orzan','A Coru–a','981000000','','')");
+
 	}
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+		// TODO Auto-generated method stub
+
 	}
 
-	public Vector<Lugar> cargarListadoLugaresDesdeBD() {
-		Vector<Lugar> resultado = new Vector<Lugar>();// crear vector vacío
-		SQLiteDatabase db = this.getReadableDatabase();// abrir acceso a base de
-														// datos en modo lectura
+	public Vector<Lugar> cargarLugaresDesdeBD() {
+		Vector<Lugar> resultado = new Vector<Lugar>();
+		SQLiteDatabase db = this.getReadableDatabase();
 		Cursor cursor = db
 				.rawQuery(
 						"SELECT Lugar.*, Categoria.nombre "
-								+ "FROM Lugar"
-								+ " JOIN Categoria ON Lugar.categoria_id = Categoria._id",
-						null);// crear query a base de datos
-		// Se podrá usar query() en vez de rawQuery
-		// join para recoger nombre de categoria, hacer tabla de categoria antes
+								+ "FROM Lugar join Categoria on Lugar.categoria_id = Categoria._id",
+						null);
+		// Se podr’a usar query() en vez de rawQuery
+		// join para recoger nombre categoria, previamente crear tabla de
+		// categorias
 		while (cursor.moveToNext()) {
 			Lugar lugar = new Lugar();
 			lugar.setId(cursor.getLong(C_ID));
@@ -102,7 +109,20 @@ public class LugaresDb extends SQLiteOpenHelper {
 			lugar.setUrl(cursor.getString(C_URL));
 			lugar.setComentario(cursor.getString(C_COMENTARIO));
 			resultado.add(lugar);
+		}
+		return resultado;
+	}
 
+	public Vector<Categoria> cargarCategoriasDesdeBD() {
+		Vector<Categoria> resultado = new Vector<Categoria>();
+		SQLiteDatabase db = this.getReadableDatabase();
+		Cursor cursor = db.rawQuery("SELECT * FROM Categoria ORDER By nombre",
+				null);
+		while (cursor.moveToNext()) {
+			Categoria categoria = new Categoria();
+			categoria.setId(cursor.getLong(C_ID));
+			categoria.setNombre(cursor.getString(C_NOMBRE));
+			resultado.add(categoria);
 		}
 		return resultado;
 	}

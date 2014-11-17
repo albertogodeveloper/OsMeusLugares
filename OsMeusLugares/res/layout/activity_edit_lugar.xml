@@ -1,8 +1,8 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/ScrollView1"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
@@ -12,43 +12,97 @@
     <RelativeLayout
         android:id="@+id/RelativeLayout1"
         android:layout_width="match_parent"
-        android:layout_height="432dp"
+        android:layout_height="wrap_content"
         android:orientation="vertical" >
-
+        
         <TextView
-            android:id="@+id/textViewNombre"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Nombre" />
+        android:id="@+id/textViewNombre"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium" 
+        android:text="Nombre" />
 
         <EditText
-            android:id="@+id/editText1"
+            android:id="@+id/editTextNombre"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_below="@+id/textViewNombre"
-            android:ems="10" />
-
+            android:layout_below="@id/textViewNombre" />
         <TextView
-            android:id="@+id/textViewTipo"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_below="@+id/editText1"
-            android:layout_marginTop="20dp"
-            android:text="Tipo" />
-
-        <Spinner
-            android:id="@id/spinnerTipo"
+        android:id="@+id/textViewTipo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tipo" 
+        android:layout_below="@id/editTextNombre"
+        android:textAppearance="?android:attr/textAppearanceMedium" 
+        />
+        <Spinner 
+            android:id="@+id/spinnerTipo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_below="@+id/textViewTipo"
-            android:layout_marginTop="31dp"
-            android:entries="@array/lista_tipos" />
-
-"
-
+            android:layout_alignTop="@id/textViewTipo"
+            android:layout_toRightOf="@id/textViewTipo"
+            android:entries="@array/lista_tipos"
+            />
+        <TextView
+            android:id="@+id/textViewDireccion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textViewTipo"
+            android:textAppearance="?android:attr/textAppearanceMedium" 
+            android:text="Dirección:" />
+         <EditText
+            android:id="@+id/editDireccion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textViewDireccion"
+            android:hint="dirección del lugar"
+            android:inputType="textPostalAddress" />
+        <TextView
+            android:id="@+id/textViewTelefono"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/editDireccion"
+            android:text="Telefono:"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+        <EditText
+            android:id="@+id/editTelefono"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/textViewTelefono"
+            android:layout_alignTop="@id/textViewTelefono"
+            android:hint="teléfono para contactar"
+            android:inputType="phone" />
+        <TextView
+            android:id="@+id/textViewUrl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/editTelefono"
+            android:text="Url:"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+        <EditText
+            android:id="@+id/editUrl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textViewUrl"
+            android:hint="página web"
+            android:inputType="textUri" />
+        <TextView
+            android:id="@+id/textViewComentario"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/editUrl"
+            android:text="Comentario:"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+        <EditText
+            android:id="@+id/editComentario"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textViewComentario"
+            android:hint="introduce tus notas"
+            android:inputType="textMultiLine" />
     </RelativeLayout>
 
+
+
 </ScrollView>
+

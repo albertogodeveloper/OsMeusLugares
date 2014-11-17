@@ -25,7 +25,7 @@ public class ListLugaresAdapter extends BaseAdapter {
 
 	public void abrir() throws SQLException {
 		lugaresDb = new LugaresDb(activity);
-		this.lista = lugaresDb.cargarListadoLugaresDesdeBD();
+		this.lista = lugaresDb.cargarLugaresDesdeBD();
 	}
 
 	@Override
@@ -53,7 +53,7 @@ public class ListLugaresAdapter extends BaseAdapter {
 		TextView textViewInfo = (TextView) view.findViewById(R.id.textViewInfo);
 		Lugar lugar = (Lugar) lista.elementAt(position);
 		textViewTitulo.setText(lugar.getNombre());
-		textViewInfo.setText(lugar.getUrl());
+		textViewInfo.setText(lugar.toString());
 		return view;
 	}
 

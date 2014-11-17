@@ -12,7 +12,6 @@ import android.widget.Toast;
 public class MainActivity extends Activity {
 
 	LugaresDb lugaresDb;
-	CategoriasDb categoriasDb;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -20,7 +19,6 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.activity_main);
 		try {
 			lugaresDb = new LugaresDb(getBaseContext());
-			categoriasDb = new CategoriasDb(getBaseContext());
 		} catch (Exception e) {
 			Log.e(getClass().toString(), e.getMessage());
 		}

@@ -17,5 +17,6 @@
     <string name="preferencias">Preferencias</string>
     <string name="listado_lugares">listado_lugares</string>
     <string name="nohaylugares">No hay lugares</string>
+    <string name="anadir">Añadir</string>
 
 </resources>

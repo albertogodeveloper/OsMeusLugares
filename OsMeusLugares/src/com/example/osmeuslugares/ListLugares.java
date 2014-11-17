@@ -21,6 +21,12 @@ public class ListLugares extends ListActivity {
 		setListAdapter(listLugaresAdapter);
 	}
 
+	public void onButtonClickAñadir(View v) {
+
+		Intent i = new Intent(this, EditLugarActivity.class);
+		i.putExtra("anadir", true);
+		startActivity(i);
+	}
 	public void onButtonClickEditar(View v) {
 
 		Intent i = new Intent(this, EditLugarActivity.class);

@@ -4,13 +4,22 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 public class EditLugarActivity extends Activity {
 
+	boolean anadir;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_edit_lugar);
+		anadir = getIntent().getBooleanExtra("anadir", false);
+		if (anadir) {
+			Toast toast = Toast.makeText(this, "Añadir True",
+					Toast.LENGTH_SHORT);
+			toast.show();
+		}
+		
 	}
 
 	@Override
