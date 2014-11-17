@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Os Meus Lugares</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_list_lugares">ListLugares</string>
+    <string name="title_activity_acerca_de">AcercaDeActivity</string>
+    <string name="title_activity_preferencias">PreferenciasActivity</string>
+    <string name="acerca_de">Acerca De</string>
+    <string name="salir">Salir</string>
+    <string name="title_activity_edit_lugar">EditLugarActivity</string>
+    <string name="Lugar">Lugar</string>
+    <string name="Editar">Editar</string>
+    <string name="lugares">Estás en lugares</string>
+    <string name="inicio">Estas en inicio</string>
+    <string name="preferencias">Preferencias</string>
+    <string name="listado_lugares">listado_lugares</string>
+    <string name="nohaylugares">No hay lugares</string>
+
+</resources>
