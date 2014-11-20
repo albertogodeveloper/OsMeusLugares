@@ -20,10 +20,10 @@ public class ListLugaresAdapter extends BaseAdapter {
 		super();
 		this.activity = activity;
 		this.lista = new Vector<Lugar>();
-
+		actualizarDesdeDb();
 	}
 
-	public void abrir() throws SQLException {
+	public void actualizarDesdeDb() throws SQLException {
 		lugaresDb = new LugaresDb(activity);
 		this.lista = lugaresDb.cargarLugaresDesdeBD();
 	}

@@ -18,5 +18,7 @@
     <string name="listado_lugares">listado_lugares</string>
     <string name="nohaylugares">No hay lugares</string>
     <string name="anadir">Añadir</string>
+    <string name="alberto">Alberto García Olivero ®</string>
+    <string name="app">Esta mierda de aplicación fue desarrollada por:</string>
 
 </resources>

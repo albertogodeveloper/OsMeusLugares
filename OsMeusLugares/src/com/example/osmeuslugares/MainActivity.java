@@ -45,7 +45,7 @@ public class MainActivity extends Activity {
 		switch (item.getItemId()) {
 		case R.id.acerca_de: {
 			Toast.makeText(this, "AcerDe", Toast.LENGTH_SHORT).show();
-			// lanzar acercade();
+			lanzarAcercaDe();
 			break;
 		}
 		case R.id.listLugares: {
@@ -61,9 +61,6 @@ public class MainActivity extends Activity {
 			break;
 		}
 		}
-		if (id == R.id.action_settings) {
-			return true;
-		}
 		return super.onOptionsItemSelected(item);
 	}
 
@@ -75,6 +72,12 @@ public class MainActivity extends Activity {
 
 	private void lanzarListadoLugares() {
 		Intent i = new Intent(this, ListLugares.class);
+		startActivity(i);
+
+	}
+
+	private void lanzarAcercaDe() {
+		Intent i = new Intent(this, AcercaDeActivity.class);
 		startActivity(i);
 
 	}

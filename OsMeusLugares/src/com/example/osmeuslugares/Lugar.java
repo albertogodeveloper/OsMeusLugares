@@ -1,5 +1,8 @@
 package com.example.osmeuslugares;
 
+import android.content.ContentValues;
+import android.os.Bundle;
+
 public class Lugar {
 	private Long id;
 	private String nombre;// obligatorio
@@ -9,6 +12,17 @@ public class Lugar {
 	private String url;
 	private String telefono;
 	private String comentario;
+
+	/* Mapeo BBDD */
+	// Campos Base de Datos Tabla Lugar
+	public static final String C_ID = "lug_id";
+	public static final String C_NOMBRE = "lug_nombre";
+	public static final String C_CATEGORIA_ID = "lug_categoria_id";
+	public static final String C_DIRECCION = "lug_direccion";
+	public static final String C_CIUDAD = "lug_ciudad";
+	public static final String C_TELEFONO = "lug_telefono";
+	public static final String C_URL = "lug_url";
+	public static final String C_COMENTARIO = "lug_comentario";
 
 	/**
 	 * @param nombre
@@ -151,4 +165,40 @@ public class Lugar {
 				+ telefono + ", comentario=" + comentario + "]";
 	}
 
+	ContentValues getContentValues() {
+		ContentValues reg = new ContentValues();
+		reg.put(C_NOMBRE, nombre);
+		reg.put(C_CATEGORIA_ID, categoria.getId());
+		reg.put(Categoria.C_NOMBRE, categoria.getNombre());
+		reg.put(C_DIRECCION, direccion);
+		reg.put(C_CIUDAD, ciudad);
+		reg.put(C_URL, url);
+		reg.put(C_TELEFONO, telefono);
+		reg.put(C_COMENTARIO, comentario);
+		return reg;
+	}
+
+	Bundle getBundle() {
+		Bundle bundle = new Bundle();
+		bundle.putString(C_NOMBRE, nombre);
+		bundle.putLong(C_CATEGORIA_ID, categoria.getId());
+		bundle.putString(Categoria.C_NOMBRE, categoria.getNombre());
+		bundle.putString(C_DIRECCION, direccion);
+		bundle.putString(C_CIUDAD, ciudad);
+		bundle.putString(C_URL, url);
+		bundle.putString(C_TELEFONO, telefono);
+		bundle.putString(C_COMENTARIO, comentario);
+		return bundle;
+	}
+
+	void setBundle(Bundle bundle) {
+
+		nombre = bundle.getString(C_NOMBRE);
+		categoria = new Categoria(bundle.getLong(C_CATEGORIA_ID),
+				bundle.getString(Categoria.C_NOMBRE));
+		direccion = bundle.getString(C_DIRECCION);
+		ciudad = bundle.getString(C_CIUDAD);
+		telefono = bundle.getString(C_TELEFONO);
+		comentario = bundle.getString(C_COMENTARIO);
+	}
 }

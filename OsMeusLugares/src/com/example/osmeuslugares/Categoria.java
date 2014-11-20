@@ -1,12 +1,16 @@
 package com.example.osmeuslugares;
 
 public class Categoria {
-
 	private Long id;
 	private String nombre;
+	// private String icon;
+
+	/* Mapeo BBDD */
+	// Campos Base de Datos Tabla Lugar
+	public static final String C_ID = "cat_id";
+	public static final String C_NOMBRE = "cat_nombre";
 
 	/**
-	 * 
 	 * @param id
 	 * @param nombre
 	 */
@@ -16,8 +20,20 @@ public class Categoria {
 		this.nombre = nombre;
 	}
 
+	/**
+	 * @param nombre
+	 *            the nombre to set
+	 */
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
+
+	/**
+	 * 
+	 */
 	public Categoria() {
 		super();
+		// TODO Auto-generated constructor stub
 	}
 
 	/**
@@ -44,9 +60,9 @@ public class Categoria {
 
 	/**
 	 * @param nombre
-	 *            the nombre to set
+	 *            the Nombre to set
 	 */
-	public void setNombre(String nombre) {
+	public void setCategoria(String nombre) {
 		this.nombre = nombre;
 	}
 
@@ -57,7 +73,26 @@ public class Categoria {
 	 */
 	@Override
 	public String toString() {
-		return "TipoLugar [id=" + id + ", nombre=" + nombre + "]";
+		return "Categoria [id=" + id + ", nombre=" + nombre + "]";
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object o) {
+		// TODO Auto-generated method stub
+		if (o instanceof Categoria) {
+			Categoria tmpCategoria = (Categoria) o;
+			if (getId() == tmpCategoria.getId()) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+		return false;
 	}
 
 }

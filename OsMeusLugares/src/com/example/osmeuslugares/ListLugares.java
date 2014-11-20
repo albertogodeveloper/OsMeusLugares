@@ -17,16 +17,20 @@ public class ListLugares extends ListActivity {
 		setContentView(R.layout.activity_list_lugares);
 
 		listLugaresAdapter = new ListLugaresAdapter(this);
-		listLugaresAdapter.abrir();
 		setListAdapter(listLugaresAdapter);
 	}
 
 	public void onButtonClickAñadir(View v) {
 
+		iniciarEditLugarAñadir();
+	}
+
+	private void iniciarEditLugarAñadir() {
 		Intent i = new Intent(this, EditLugarActivity.class);
 		i.putExtra("anadir", true);
 		startActivity(i);
 	}
+
 	public void onButtonClickEditar(View v) {
 
 		Intent i = new Intent(this, EditLugarActivity.class);
@@ -41,10 +45,26 @@ public class ListLugares extends ListActivity {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		int id = item.getItemId();
-		if (id == R.id.action_settings) {
-			return true;
+		switch (item.getItemId()) {
+		case R.id.anadir: {
+			iniciarEditLugarAñadir();
+			break;
+		}
+		case R.id.action_settings: {
+			lanzarPrefencias();
+			break;
+		}
+		case R.id.salir: {
+			finish();
+			break;
+		}
 		}
 		return super.onOptionsItemSelected(item);
+	}
+
+	private void lanzarPrefencias() {
+		Intent i = new Intent(this, PreferenciasActivity.class);
+		startActivity(i);
+
 	}
 }
