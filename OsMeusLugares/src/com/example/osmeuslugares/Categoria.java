@@ -11,6 +11,14 @@ public class Categoria {
 	public static final String C_NOMBRE = "cat_nombre";
 
 	/**
+	 * Constructor
+	 */
+	public Categoria() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	/**
 	 * @param id
 	 * @param nombre
 	 */
@@ -26,14 +34,6 @@ public class Categoria {
 	 */
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
-	}
-
-	/**
-	 * 
-	 */
-	public Categoria() {
-		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	/**

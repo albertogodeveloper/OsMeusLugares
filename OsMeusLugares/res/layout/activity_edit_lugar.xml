@@ -38,7 +38,7 @@
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <Spinner
-            android:id="@+id/spinnerTipo"
+            android:id="@+id/spinnerCategoria"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignTop="@id/textViewTipo"
@@ -50,7 +50,7 @@
             android:id="@+id/textViewDireccion"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/spinnerTipo"
+            android:layout_below="@+id/spinnerCategoria"
             android:paddingTop="20dp"
             android:text="Dirección:"
             android:textAppearance="?android:attr/textAppearanceMedium" />

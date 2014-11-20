@@ -13,7 +13,6 @@ import android.util.Log;
 
 public class LugaresDb extends SQLiteOpenHelper {
 
-	private static String LOGTAG = "LugaresDb";
 	private SQLiteDatabase db;
 	private static String nombre = "lugares.db";
 	private static CursorFactory factory = null;
@@ -21,12 +20,10 @@ public class LugaresDb extends SQLiteOpenHelper {
 
 	public LugaresDb(Context context) {
 		super(context, nombre, factory, version);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
 	public void onCreate(SQLiteDatabase db) {
-		// TODO Auto-generated method stub
 		this.db = db;
 		try {
 			String sql = "CREATE TABLE lugar("
@@ -74,7 +71,6 @@ public class LugaresDb extends SQLiteOpenHelper {
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-		// TODO Auto-generated method stub
 		Log.i("INFO", "Base de datos: onUpgrade" + oldVersion + "->"
 				+ newVersion);
 		if (newVersion > oldVersion) {
@@ -100,7 +96,7 @@ public class LugaresDb extends SQLiteOpenHelper {
 		Cursor cursor = db.rawQuery("SELECT Lugar.*, cat_nombre "
 				+ "FROM Lugar join Categoria on lug_categoria_id = cat_id",
 				null);
-		// Se podr’a usar query() en vez de rawQuery
+		// Se podría usar query() en vez de rawQuery
 		// join para recoger nombre categoria, previamente crear tabla de
 		// categorias
 		while (cursor.moveToNext()) {
@@ -132,7 +128,7 @@ public class LugaresDb extends SQLiteOpenHelper {
 		SQLiteDatabase db = this.getReadableDatabase();
 		Cursor cursor = db.rawQuery(
 				"SELECT * FROM Categoria ORDER By cat_nombre", null);
-		// Como es para un spinner incluir una primera opci—n por defecto
+		// Como es para un spinner incluir una primera opción por defecto
 		resultado.add(new Categoria(0L, "Seleccionar..."));
 		while (cursor.moveToNext()) {
 			Categoria categoria = new Categoria();

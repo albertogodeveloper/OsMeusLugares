@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ListView;
 
 public class ListLugares extends ListActivity {
 
@@ -20,51 +21,56 @@ public class ListLugares extends ListActivity {
 		setListAdapter(listLugaresAdapter);
 	}
 
-	public void onButtonClickAñadir(View v) {
-
-		iniciarEditLugarAñadir();
+	public void imageButtonAddLugarOnClick(View v) {
+		Bundle extras = new Bundle();
+		extras.putBoolean("add", true);
+		lanzarEditLugar(extras);
 	}
 
-	private void iniciarEditLugarAñadir() {
-		Intent i = new Intent(this, EditLugarActivity.class);
-		i.putExtra("anadir", true);
-		startActivity(i);
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see android.app.ListActivity#onListItemClick(android.widget.ListView,
+	 * android.view.View, int, long)
+	 */
+	@Override
+	protected void onListItemClick(ListView l, View v, int position, long id) {
+		// TODO Auto-generated method stub
+		super.onListItemClick(l, v, position, id);
+		Lugar itemLugar = (Lugar) getListAdapter().getItem(position);
+		Bundle extras = itemLugar.getBundle();
+		extras.putBoolean("add", false);
+		lanzarEditLugar(extras);
+
+		/*
+		 * Toast.makeText(this, "Selecci—n: " + Integer.toString(position) +
+		 * " - " + itemLugar.toString(),Toast.LENGTH_LONG).show();
+		 */
 	}
 
-	public void onButtonClickEditar(View v) {
-
+	private void lanzarEditLugar(Bundle extras) {
+		// TODO Auto-generated method stub
 		Intent i = new Intent(this, EditLugarActivity.class);
+		i.putExtras(extras);
 		startActivity(i);
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.list_lugares, menu);
 		return true;
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case R.id.anadir: {
-			iniciarEditLugarAñadir();
-			break;
-		}
-		case R.id.action_settings: {
-			lanzarPrefencias();
-			break;
-		}
-		case R.id.salir: {
-			finish();
-			break;
-		}
+		// Handle action bar item clicks here. The action bar will
+		// automatically handle clicks on the Home/Up button, so long
+		// as you specify a parent activity in AndroidManifest.xml.
+		int id = item.getItemId();
+		if (id == R.id.action_settings) {
+			return true;
 		}
 		return super.onOptionsItemSelected(item);
-	}
-
-	private void lanzarPrefencias() {
-		Intent i = new Intent(this, PreferenciasActivity.class);
-		startActivity(i);
-
 	}
 }
