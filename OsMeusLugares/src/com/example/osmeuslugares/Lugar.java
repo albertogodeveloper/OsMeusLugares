@@ -152,7 +152,6 @@ public class Lugar {
 		this.comentario = comentario;
 	}
 
-
 	@Override
 	public String toString() {
 		return "Lugar [id=" + id + ", nombre=" + nombre + ", categoria="
@@ -165,7 +164,7 @@ public class Lugar {
 		ContentValues reg = new ContentValues();
 		reg.put(C_NOMBRE, nombre);
 		reg.put(C_CATEGORIA_ID, categoria.getId());
-		reg.put(Categoria.C_NOMBRE, categoria.getNombre());
+		// reg.put(Categoria.C_NOMBRE, categoria.getNombre());
 		reg.put(C_DIRECCION, direccion);
 		reg.put(C_CIUDAD, ciudad);
 		reg.put(C_URL, url);
@@ -176,6 +175,7 @@ public class Lugar {
 
 	Bundle getBundle() {
 		Bundle bundle = new Bundle();
+		bundle.putLong(C_ID, id);
 		bundle.putString(C_NOMBRE, nombre);
 		bundle.putLong(C_CATEGORIA_ID, categoria.getId());
 		bundle.putString(Categoria.C_NOMBRE, categoria.getNombre());
@@ -189,8 +189,10 @@ public class Lugar {
 
 	void setBundle(Bundle bundle) {
 
+		id = bundle.getLong(C_ID);
 		nombre = bundle.getString(C_NOMBRE);
-		categoria = new Categoria(bundle.getLong(C_CATEGORIA_ID),bundle.getString(Categoria.C_NOMBRE));
+		categoria = new Categoria(bundle.getLong(C_CATEGORIA_ID),
+				bundle.getString(Categoria.C_NOMBRE));
 		ciudad = bundle.getString(C_CIUDAD);
 		direccion = bundle.getString(C_DIRECCION);
 		url = bundle.getString(C_URL);

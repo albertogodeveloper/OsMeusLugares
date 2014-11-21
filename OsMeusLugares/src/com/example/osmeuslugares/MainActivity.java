@@ -42,7 +42,7 @@ public class MainActivity extends Activity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		int id = item.getItemId();
-		switch (item.getItemId()) {
+		switch (id) {
 		case R.id.acerca_de: {
 			Toast.makeText(this, "AcerDe", Toast.LENGTH_SHORT).show();
 			lanzarAcercaDe();

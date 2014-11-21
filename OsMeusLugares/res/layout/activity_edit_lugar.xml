@@ -26,8 +26,7 @@
             android:id="@+id/editNombre"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/textViewNombre"
-            android:hint="@string/nombredellugar" />
+            android:layout_below="@id/textViewNombre" />
 
         <TextView
             android:id="@+id/textViewTipo"
@@ -133,12 +132,24 @@
             android:inputType="textMultiLine" />
 
         <Button
-            android:id="@+id/button1"
+            android:id="@+id/btnEliminar"
+            style="?android:attr/buttonStyleSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
-            android:onClick="onButtonClickGuardarNuevo"
+            android:onClick="onButtonClickEliminar"
+            android:text="@string/eliminar"
+            android:visibility="invisible" />
+
+        <Button
+            android:id="@+id/btnGuardar"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_toLeftOf="@+id/btnEliminar"
+            android:onClick="onButtonClickGuardar"
             android:text="@string/guardar" />
 
     </RelativeLayout>

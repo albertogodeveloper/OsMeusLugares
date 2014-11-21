@@ -1,11 +1,11 @@
 package com.example.osmeuslugares;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,7 +22,7 @@ public class EditLugarActivity extends Activity {
 	private TextView editTextTelefono;
 	private TextView editTextUrl;
 	private TextView editTextComentario;
-
+	private Button btnEliminar;
 	CategoriasAdapter categoriasAdapter;
 	private boolean add;
 
@@ -30,7 +30,8 @@ public class EditLugarActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_edit_lugar);
-
+		// Botón eliminar para usar visibilidad.
+		btnEliminar = (Button) findViewById(R.id.btnEliminar);
 		// Nombre
 		editTextNombre = (TextView) findViewById(R.id.editNombre);
 		// Categoria
@@ -57,8 +58,10 @@ public class EditLugarActivity extends Activity {
 					Toast.LENGTH_LONG).show();
 
 		} else {
-			Toast.makeText(getBaseContext(), extras.getString(Lugar.C_NOMBRE),
+			Toast.makeText(getBaseContext(),
+					"EDITAR " + extras.getString(Lugar.C_NOMBRE),
 					Toast.LENGTH_LONG).show();
+			btnEliminar.setVisibility(Button.VISIBLE);
 			lugarEdit.setBundle(extras);
 		}
 
@@ -67,17 +70,18 @@ public class EditLugarActivity extends Activity {
 
 	}
 
-	public void onButtonClickGuardarNuevo(View v) {
+	public void onButtonClickGuardar(View v) {
 		if (add) {
 			crearLugarEnBd();
-			lanzarListadoLugares();
-			finish();
-
 		} else {
 			actualizarLugarEnBd();
-			lanzarListadoLugares();
-			finish();
 		}
+		finish();
+	}
+
+	public void onButtonClickEliminar(View v) {
+		eliminarLugarEnBd();
+		finish();
 	}
 
 	private void crearLugarEnBd() {
@@ -85,11 +89,16 @@ public class EditLugarActivity extends Activity {
 		Toast.makeText(getBaseContext(), "GUARDADO CORRECTAMENTE",
 				Toast.LENGTH_LONG).show();
 	}
-	private void actualizarLugarEnBd(){
-		
-	    int id=(db.buscarIdEnLugares(lugarEdit.getNombre()));
-		db.updateLugar(id,getLugarDesdeCampos());
+
+	private void actualizarLugarEnBd() {
+		db.updateLugar(getLugarEdit());
 		Toast.makeText(getBaseContext(), "ACTUALIZADO CORRECTAMENTE",
+				Toast.LENGTH_LONG).show();
+	}
+
+	private void eliminarLugarEnBd() {
+		db.deleteLugar(lugarEdit);
+		Toast.makeText(getBaseContext(), "ELIMINADO CORRECTAMENTE",
 				Toast.LENGTH_LONG).show();
 	}
 
@@ -97,13 +106,26 @@ public class EditLugarActivity extends Activity {
 		lugarNuevo = new Lugar();
 		lugarNuevo.setNombre(editTextNombre.getText().toString());
 		int position = spinnerCategoria.getSelectedItemPosition();
-		lugarNuevo.setCategoria((Categoria) categoriasAdapter.getItem(position));
+		lugarNuevo
+				.setCategoria((Categoria) categoriasAdapter.getItem(position));
 		lugarNuevo.setCiudad(editTextCiudad.getText().toString());
 		lugarNuevo.setDireccion(editTextDireccion.getText().toString());
 		lugarNuevo.setTelefono(editTextTelefono.getText().toString());
 		lugarNuevo.setUrl(editTextUrl.getText().toString());
 		lugarNuevo.setComentario(editTextComentario.getText().toString());
 		return lugarNuevo;
+	}
+
+	private Lugar getLugarEdit() {
+		lugarEdit.setNombre(editTextNombre.getText().toString());
+		int position = spinnerCategoria.getSelectedItemPosition();
+		lugarEdit.setCategoria((Categoria) categoriasAdapter.getItem(position));
+		lugarEdit.setCiudad(editTextCiudad.getText().toString());
+		lugarEdit.setDireccion(editTextDireccion.getText().toString());
+		lugarEdit.setTelefono(editTextTelefono.getText().toString());
+		lugarEdit.setUrl(editTextUrl.getText().toString());
+		lugarEdit.setComentario(editTextComentario.getText().toString());
+		return lugarEdit;
 	}
 
 	private void establecerValoresEditar() {
@@ -121,12 +143,6 @@ public class EditLugarActivity extends Activity {
 		editTextTelefono.setText(lugarEdit.getTelefono());
 		editTextUrl.setText(lugarEdit.getUrl());
 		editTextComentario.setText(lugarEdit.getComentario());
-	}
-
-	private void lanzarListadoLugares() {
-		Intent i = new Intent(this, ListLugares.class);
-		startActivity(i);
-
 	}
 
 	@Override

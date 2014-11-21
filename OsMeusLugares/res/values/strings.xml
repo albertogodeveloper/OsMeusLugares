@@ -37,5 +37,6 @@
     <string name="comentario">Comentario</string>
     <string name="listadodesitios">Listado de Sitios</string>
     <string name="nohaysitios">No hay sitios</string>
+    <string name="eliminar">Eliminar</string>
 
 </resources>

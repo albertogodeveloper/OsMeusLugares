@@ -1,15 +1,12 @@
 package com.example.osmeuslugares;
 
 import java.util.Vector;
-
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.support.annotation.IdRes;
 import android.util.Log;
 
 public class LugaresDb extends SQLiteOpenHelper {
@@ -108,7 +105,7 @@ public class LugaresDb extends SQLiteOpenHelper {
 		// categorias
 		while (cursor.moveToNext()) {
 			Lugar lugar = new Lugar();
-			lugar.setId(cursor.getLong(cursor.getColumnIndex(Lugar.C_ID)));
+			lugar.setId(cursor.getLong(0));
 			lugar.setNombre(cursor.getString(cursor
 					.getColumnIndex(Lugar.C_NOMBRE)));
 			Long idCategoria = cursor.getLong(cursor
@@ -150,39 +147,20 @@ public class LugaresDb extends SQLiteOpenHelper {
 
 	public void createLugar(Lugar newLugar) {
 		SQLiteDatabase db = this.getWritableDatabase();
-		ContentValues reg = new ContentValues();
-		reg.put(Lugar.C_NOMBRE, newLugar.getNombre());
-		reg.put(Lugar.C_CATEGORIA_ID, newLugar.getCategoria().getId());
-		reg.put(Lugar.C_CIUDAD, newLugar.getCiudad());
-		reg.put(Lugar.C_DIRECCION, newLugar.getDireccion());
-		reg.put(Lugar.C_TELEFONO, newLugar.getTelefono());
-		reg.put(Lugar.C_URL, newLugar.getUrl());
-		reg.put(Lugar.C_COMENTARIO, newLugar.getComentario());
 		// Insertamos el registro en la base de datos
-		db.insert("Lugar", null, reg);
+		db.insert("Lugar", null, newLugar.getContentValues());
 	}
 
-	public void updateLugar(int id,Lugar newLugar) {
+	public void updateLugar(Lugar lugarEdit) {
 		SQLiteDatabase db = this.getWritableDatabase();
-		ContentValues reg = new ContentValues();
-		reg.put(Lugar.C_NOMBRE, newLugar.getNombre());
-		reg.put(Lugar.C_CATEGORIA_ID, newLugar.getCategoria().getId());
-		reg.put(Lugar.C_CIUDAD, newLugar.getCiudad());
-		reg.put(Lugar.C_DIRECCION, newLugar.getDireccion());
-		reg.put(Lugar.C_TELEFONO, newLugar.getTelefono());
-		reg.put(Lugar.C_URL, newLugar.getUrl());
-		reg.put(Lugar.C_COMENTARIO, newLugar.getComentario());
 		// Actualizamos el registro en la base de datos
-		db.update("Lugar", reg, "lug_id="+id,null);
+		db.update("Lugar", lugarEdit.getContentValues(),
+				"lug_id=" + lugarEdit.getId(), null);
 	}
-	public int buscarIdEnLugares(String nombreLugar){
-		SQLiteDatabase db = this.getReadableDatabase();
-		Cursor c = db.rawQuery("SELECT lug_id FROM Lugar WHERE lug_nombre = '"+nombreLugar+"'", null);
-		if (c.moveToFirst()) {
-			int id = c.getInt(0);
-			return id;
-		}
-		
-		return 0;
+
+	public void deleteLugar(Lugar lugarDel) {
+		SQLiteDatabase db = this.getWritableDatabase();
+		// Eliminamos el registro de la base de datos.
+		db.delete("Lugar", "lug_id=" + lugarDel.getId(), null);
 	}
 }

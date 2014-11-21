@@ -34,14 +34,12 @@ public class ListLugares extends ListActivity {
 		Bundle extras = itemLugar.getBundle();
 		extras.putBoolean("add", false);
 		lanzarEditLugar(extras);
-
 	}
 
 	private void lanzarEditLugar(Bundle extras) {
 		Intent i = new Intent(this, EditLugarActivity.class);
 		i.putExtras(extras);
 		startActivity(i);
-		finish();
 	}
 
 	@Override
@@ -58,4 +56,12 @@ public class ListLugares extends ListActivity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
+
+	@Override
+	protected void onRestart() {
+		super.onRestart();
+		listLugaresAdapter.actualizarDesdeDb();
+		listLugaresAdapter.notifyDataSetChanged();
+	}
+
 }
