@@ -12,7 +12,7 @@
     <string name="title_activity_edit_lugar">EditLugarActivity</string>
     <string name="Lugar">Lugar</string>
     <string name="Editar">Editar</string>
-    <string name="lugares">Estás en lugares</string>
+    <string name="estasenlugares">Estás en lugares</string>
     <string name="inicio">Estas en inicio</string>
     <string name="preferencias">Preferencias</string>
     <string name="listado_lugares">listado_lugares</string>
@@ -20,5 +20,22 @@
     <string name="anadir">Añadir</string>
     <string name="alberto">Alberto García Olivero ®</string>
     <string name="app">Esta mierda de aplicación fue desarrollada por:</string>
+    <string name="lugares">Lugares</string>
+    <string name="guardar">Guardar</string>
+    <string name="nombredellugar">Nombre del lugar</string>
+    <string name="ciudaddellugar">Ciudad del lugar</string>
+    <string name="direcciondellugar">Dirección del lugar</string>
+    <string name="telefonodellugar">Teléfono para contactar</string>
+    <string name="paginaweb">Página Web</string>
+    <string name="introducetusnotas">Introduce tus notas</string>
+    <string name="nombre">Nombre</string>
+    <string name="tipo">Tipo</string>
+    <string name="ciudad">Ciudad</string>
+    <string name="direccion">Dirección</string>
+    <string name="telefono">Teléfono</string>
+    <string name="url">Url</string>
+    <string name="comentario">Comentario</string>
+    <string name="listadodesitios">Listado de Sitios</string>
+    <string name="nohaysitios">No hay sitios</string>
 
 </resources>

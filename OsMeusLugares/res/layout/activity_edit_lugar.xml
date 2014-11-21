@@ -16,25 +16,26 @@
         android:orientation="vertical" >
         
         <TextView
-        android:id="@+id/textViewNombre"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium" 
-        android:text="Nombre" />
+            android:id="@+id/textViewNombre"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/nombre"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <EditText
-            android:id="@+id/editTextNombre"
+            android:id="@+id/editNombre"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/textViewNombre" />
+            android:layout_below="@id/textViewNombre"
+            android:hint="@string/nombredellugar" />
 
         <TextView
             android:id="@+id/textViewTipo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/editTextNombre"
-            android:paddingTop="20dp"
-            android:text="Tipo"
+            android:layout_below="@id/editNombre"
+            android:paddingTop="10dp"
+            android:text="@string/tipo"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <Spinner
@@ -44,32 +45,48 @@
             android:layout_alignTop="@id/textViewTipo"
             android:layout_toRightOf="@id/textViewTipo"
             android:entries="@array/lista_tipos"
-            android:paddingTop="20dp" />
-
+            android:paddingTop="10dp" />
+			
+		<TextView
+		    android:id="@+id/textViewCiudad"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_below="@id/spinnerCategoria"
+		    android:paddingTop="10dp"
+		    android:text="@string/ciudad"
+		    android:textAppearance="?android:attr/textAppearanceMedium" />
+        
+         <EditText
+             android:id="@+id/editCiudad"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:layout_below="@id/textViewCiudad"
+             android:hint="@string/ciudaddellugar" />
+        
         <TextView
             android:id="@+id/textViewDireccion"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/spinnerCategoria"
-            android:paddingTop="20dp"
-            android:text="Dirección:"
+            android:layout_below="@id/editCiudad"
+            android:paddingTop="10dp"
+            android:text="@string/direccion"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
          <EditText
-            android:id="@+id/editDireccion"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/textViewDireccion"
-            android:hint="dirección del lugar"
-            android:inputType="textPostalAddress" />
+             android:id="@+id/editDireccion"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:layout_below="@id/textViewDireccion"
+             android:hint="@string/direcciondellugar"
+             android:inputType="textPostalAddress" />
 
         <TextView
             android:id="@+id/textViewTelefono"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/editDireccion"
-            android:paddingTop="20dp"
-            android:text="Telefono:"
+            android:paddingTop="10dp"
+            android:text="@string/telefono"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <EditText
@@ -77,8 +94,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-            android:layout_below="@+id/textViewTelefono"
-            android:hint="teléfono para contactar"
+            android:layout_below="@id/textViewTelefono"
+            android:hint="@string/telefonodellugar"
             android:inputType="phone" />
 
         <TextView
@@ -86,8 +103,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/editTelefono"
-            android:paddingTop="20dp"
-            android:text="Url:"
+            android:paddingTop="10dp"
+            android:text="@string/url"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <EditText
@@ -95,7 +112,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/textViewUrl"
-            android:hint="página web"
+            android:hint="@string/paginaweb"
             android:inputType="textUri" />
 
         <TextView
@@ -103,8 +120,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/editUrl"
-            android:paddingTop="20dp"
-            android:text="Comentario:"
+            android:paddingTop="10dp"
+            android:text="@string/comentario"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <EditText
@@ -112,8 +129,18 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/textViewComentario"
-            android:hint="introduce tus notas"
+            android:hint="@string/introducetusnotas"
             android:inputType="textMultiLine" />
+
+        <Button
+            android:id="@+id/button1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:onClick="onButtonClickGuardarNuevo"
+            android:text="@string/guardar" />
+
     </RelativeLayout>
 
 

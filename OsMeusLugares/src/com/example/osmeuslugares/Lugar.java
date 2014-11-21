@@ -7,8 +7,8 @@ public class Lugar {
 	private Long id;
 	private String nombre;// obligatorio
 	private Categoria categoria;// obligatorio
-	private String direccion;
 	private String ciudad;
+	private String direccion;
 	private String url;
 	private String telefono;
 	private String comentario;
@@ -152,11 +152,7 @@ public class Lugar {
 		this.comentario = comentario;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#toString()
-	 */
+
 	@Override
 	public String toString() {
 		return "Lugar [id=" + id + ", nombre=" + nombre + ", categoria="
@@ -195,8 +191,9 @@ public class Lugar {
 
 		nombre = bundle.getString(C_NOMBRE);
 		categoria = new Categoria(bundle.getLong(C_CATEGORIA_ID),bundle.getString(Categoria.C_NOMBRE));
-		direccion = bundle.getString(C_DIRECCION);
 		ciudad = bundle.getString(C_CIUDAD);
+		direccion = bundle.getString(C_DIRECCION);
+		url = bundle.getString(C_URL);
 		telefono = bundle.getString(C_TELEFONO);
 		comentario = bundle.getString(C_COMENTARIO);
 	}

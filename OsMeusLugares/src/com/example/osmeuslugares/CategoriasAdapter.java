@@ -32,34 +32,32 @@ public class CategoriasAdapter extends BaseAdapter {
 	}
 	@Override
 	public int getCount() {
-		// TODO Auto-generated method stub
+		
 		return lista.size();
 	}
 
 	@Override
 	public Object getItem(int position) {
-		// TODO Auto-generated method stub
+		
 		return lista.elementAt(position);
 	}
 
 	@Override
 	public long getItemId(int position) {
-		// TODO Auto-generated method stub
+		
 		Categoria categoria = (Categoria)getItem(position);
 		return categoria.getId();
 	}
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		// TODO Auto-generated method stub
-
+		
 		Categoria categoria = (Categoria)lista.elementAt(position);
 		TextView text = new TextView(activity);
 		text.setText(categoria.getNombre());
         return text;
 		
 	}
-	
 	
 	public int getPositionById(Long id) {
 		//Buscar en lista 

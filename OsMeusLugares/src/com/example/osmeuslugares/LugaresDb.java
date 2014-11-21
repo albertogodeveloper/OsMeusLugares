@@ -9,6 +9,7 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.support.annotation.IdRes;
 import android.util.Log;
 
 public class LugaresDb extends SQLiteOpenHelper {
@@ -17,6 +18,7 @@ public class LugaresDb extends SQLiteOpenHelper {
 	private static String nombre = "lugares.db";
 	private static CursorFactory factory = null;
 	private static int version = 2;
+	private static String sql;
 
 	public LugaresDb(Context context) {
 		super(context, nombre, factory, version);
@@ -26,33 +28,39 @@ public class LugaresDb extends SQLiteOpenHelper {
 	public void onCreate(SQLiteDatabase db) {
 		this.db = db;
 		try {
-			String sql = "CREATE TABLE lugar("
-					+ "lug_id INTEGER PRIMARY KEY AUTOINCREMENT, "
-					+ "lug_nombre TEXT NOT NULL, "
-					+ "lug_categoria_id INTEGER NOT NULL,"
-					+ "lug_direccion TEXT," + "lug_ciudad TEXT,"
-					+ "lug_telefono TEXT, " + "lug_url TEXT,"
-					+ "lug_comentario TEXT);";
+			crearTablaLugar(db);
 
-			db.execSQL(sql);
+			crearTablaCategoria(db);
 
-			sql = "CREATE UNIQUE INDEX idx_lug_nombre ON Lugar(lug_nombre ASC)";
-			db.execSQL(sql);
-
-			sql = "CREATE TABLE Categoria("
-					+ "cat_id INTEGER PRIMARY KEY AUTOINCREMENT, "
-					+ "cat_nombre TEXT NOT NULL);";
-
-			db.execSQL(sql);
-
-			sql = "CREATE UNIQUE INDEX idx_cat_nombre ON Categoria(cat_nombre ASC)";
-			db.execSQL(sql);
-			// Insertar datos de prueba
 			insertarLugaresPrueba();
 		} catch (SQLException e) {
 			Log.e(getClass().toString(), e.getMessage());
 		}
+	}
 
+	private void crearTablaLugar(SQLiteDatabase db) {
+		sql = "CREATE TABLE lugar("
+				+ "lug_id INTEGER PRIMARY KEY AUTOINCREMENT, "
+				+ "lug_nombre TEXT NOT NULL, "
+				+ "lug_categoria_id INTEGER NOT NULL," + "lug_direccion TEXT,"
+				+ "lug_ciudad TEXT," + "lug_telefono TEXT, " + "lug_url TEXT,"
+				+ "lug_comentario TEXT);";
+
+		db.execSQL(sql);
+
+		sql = "CREATE UNIQUE INDEX idx_lug_nombre ON Lugar(lug_nombre ASC)";
+		db.execSQL(sql);
+	}
+
+	private void crearTablaCategoria(SQLiteDatabase db) {
+		sql = "CREATE TABLE Categoria("
+				+ "cat_id INTEGER PRIMARY KEY AUTOINCREMENT, "
+				+ "cat_nombre TEXT NOT NULL);";
+
+		db.execSQL(sql);
+
+		sql = "CREATE UNIQUE INDEX idx_cat_nombre ON Categoria(cat_nombre ASC)";
+		db.execSQL(sql);
 	}
 
 	private void insertarLugaresPrueba() {
@@ -85,9 +93,8 @@ public class LugaresDb extends SQLiteOpenHelper {
 			onCreate(db);
 
 			Log.i(this.getClass().toString(),
-					"Base de datos actualizada. versi—n 2");
+					"Base de datos actualizada. versión 2");
 		}
-
 	}
 
 	public Vector<Lugar> cargarLugaresDesdeBD() {
@@ -144,7 +151,38 @@ public class LugaresDb extends SQLiteOpenHelper {
 	public void createLugar(Lugar newLugar) {
 		SQLiteDatabase db = this.getWritableDatabase();
 		ContentValues reg = new ContentValues();
-
+		reg.put(Lugar.C_NOMBRE, newLugar.getNombre());
+		reg.put(Lugar.C_CATEGORIA_ID, newLugar.getCategoria().getId());
+		reg.put(Lugar.C_CIUDAD, newLugar.getCiudad());
+		reg.put(Lugar.C_DIRECCION, newLugar.getDireccion());
+		reg.put(Lugar.C_TELEFONO, newLugar.getTelefono());
+		reg.put(Lugar.C_URL, newLugar.getUrl());
+		reg.put(Lugar.C_COMENTARIO, newLugar.getComentario());
+		// Insertamos el registro en la base de datos
+		db.insert("Lugar", null, reg);
 	}
 
+	public void updateLugar(int id,Lugar newLugar) {
+		SQLiteDatabase db = this.getWritableDatabase();
+		ContentValues reg = new ContentValues();
+		reg.put(Lugar.C_NOMBRE, newLugar.getNombre());
+		reg.put(Lugar.C_CATEGORIA_ID, newLugar.getCategoria().getId());
+		reg.put(Lugar.C_CIUDAD, newLugar.getCiudad());
+		reg.put(Lugar.C_DIRECCION, newLugar.getDireccion());
+		reg.put(Lugar.C_TELEFONO, newLugar.getTelefono());
+		reg.put(Lugar.C_URL, newLugar.getUrl());
+		reg.put(Lugar.C_COMENTARIO, newLugar.getComentario());
+		// Actualizamos el registro en la base de datos
+		db.update("Lugar", reg, "lug_id="+id,null);
+	}
+	public int buscarIdEnLugares(String nombreLugar){
+		SQLiteDatabase db = this.getReadableDatabase();
+		Cursor c = db.rawQuery("SELECT lug_id FROM Lugar WHERE lug_nombre = '"+nombreLugar+"'", null);
+		if (c.moveToFirst()) {
+			int id = c.getInt(0);
+			return id;
+		}
+		
+		return 0;
+	}
 }

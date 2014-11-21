@@ -1,19 +1,23 @@
 package com.example.osmeuslugares;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class EditLugarActivity extends Activity {
 
+	private Lugar lugarNuevo;
 	private Lugar lugarEdit;
-
+	private LugaresDb db = new LugaresDb(this);
 	private Spinner spinnerCategoria;
 	private TextView editTextNombre;
+	private TextView editTextCiudad;
 	private TextView editTextDireccion;
 	private TextView editTextTelefono;
 	private TextView editTextUrl;
@@ -28,11 +32,13 @@ public class EditLugarActivity extends Activity {
 		setContentView(R.layout.activity_edit_lugar);
 
 		// Nombre
-		editTextNombre = (TextView) findViewById(R.id.editTextNombre);
+		editTextNombre = (TextView) findViewById(R.id.editNombre);
 		// Categoria
 		spinnerCategoria = (Spinner) findViewById(R.id.spinnerCategoria);
 		categoriasAdapter = new CategoriasAdapter(this);
 		spinnerCategoria.setAdapter(categoriasAdapter);
+		// Ciudad
+		editTextCiudad = (TextView) findViewById(R.id.editCiudad);
 		// Direccion
 		editTextDireccion = (TextView) findViewById(R.id.editDireccion);
 		// Telefono
@@ -47,8 +53,9 @@ public class EditLugarActivity extends Activity {
 		extras = getIntent().getExtras();
 		add = extras.getBoolean("add");
 		if (add) {
-			Toast.makeText(getBaseContext(), "ADD", Toast.LENGTH_LONG).show();
-			// lugarEdit.setValoresIniciales();
+			Toast.makeText(getBaseContext(), "CREAR NUEVO LUGAR",
+					Toast.LENGTH_LONG).show();
+
 		} else {
 			Toast.makeText(getBaseContext(), extras.getString(Lugar.C_NOMBRE),
 					Toast.LENGTH_LONG).show();
@@ -60,8 +67,47 @@ public class EditLugarActivity extends Activity {
 
 	}
 
+	public void onButtonClickGuardarNuevo(View v) {
+		if (add) {
+			crearLugarEnBd();
+			lanzarListadoLugares();
+			finish();
+
+		} else {
+			actualizarLugarEnBd();
+			lanzarListadoLugares();
+			finish();
+		}
+	}
+
+	private void crearLugarEnBd() {
+		db.createLugar(getLugarDesdeCampos());
+		Toast.makeText(getBaseContext(), "GUARDADO CORRECTAMENTE",
+				Toast.LENGTH_LONG).show();
+	}
+	private void actualizarLugarEnBd(){
+		
+	    int id=(db.buscarIdEnLugares(lugarEdit.getNombre()));
+		db.updateLugar(id,getLugarDesdeCampos());
+		Toast.makeText(getBaseContext(), "ACTUALIZADO CORRECTAMENTE",
+				Toast.LENGTH_LONG).show();
+	}
+
+	private Lugar getLugarDesdeCampos() {
+		lugarNuevo = new Lugar();
+		lugarNuevo.setNombre(editTextNombre.getText().toString());
+		int position = spinnerCategoria.getSelectedItemPosition();
+		lugarNuevo.setCategoria((Categoria) categoriasAdapter.getItem(position));
+		lugarNuevo.setCiudad(editTextCiudad.getText().toString());
+		lugarNuevo.setDireccion(editTextDireccion.getText().toString());
+		lugarNuevo.setTelefono(editTextTelefono.getText().toString());
+		lugarNuevo.setUrl(editTextUrl.getText().toString());
+		lugarNuevo.setComentario(editTextComentario.getText().toString());
+		return lugarNuevo;
+	}
+
 	private void establecerValoresEditar() {
-		// TODO Auto-generated method stub
+
 		editTextNombre.setText(lugarEdit.getNombre());
 
 		int position = 0;
@@ -70,11 +116,17 @@ public class EditLugarActivity extends Activity {
 					.getCategoria().getId());
 		}
 		spinnerCategoria.setSelection(position);
-
+		editTextCiudad.setText(lugarEdit.getCiudad());
 		editTextDireccion.setText(lugarEdit.getDireccion());
 		editTextTelefono.setText(lugarEdit.getTelefono());
 		editTextUrl.setText(lugarEdit.getUrl());
 		editTextComentario.setText(lugarEdit.getComentario());
+	}
+
+	private void lanzarListadoLugares() {
+		Intent i = new Intent(this, ListLugares.class);
+		startActivity(i);
+
 	}
 
 	@Override

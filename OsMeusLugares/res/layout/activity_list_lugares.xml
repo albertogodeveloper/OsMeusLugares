@@ -19,9 +19,9 @@
 <TextView
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="10px"
+    android:layout_margin="10dp"
     android:gravity="center"
-    android:text="Listado de Sitios"
+    android:text="@string/listadodesitios"
     android:textSize="24sp" />
 
 <FrameLayout
@@ -33,11 +33,12 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:drawSelectorOnTop="false" />
+
        <TextView
-              android:id="@android:id/empty"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:text="Non hay sitios" />
+           android:id="@android:id/empty"
+           android:layout_width="match_parent"
+           android:layout_height="match_parent"
+           android:text="@string/nohaysitios" />
 
 </FrameLayout>
 
