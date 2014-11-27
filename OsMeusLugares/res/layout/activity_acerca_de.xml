@@ -9,7 +9,7 @@
     tools:context="com.example.osmeuslugares.AcercaDeActivity" >
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/tvTipo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -18,10 +18,10 @@
         android:text="@string/alberto" />
 
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/tvNombre"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/textView2"
+        android:layout_alignBottom="@+id/tvTipo"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="42dp"
         android:text="@string/app" />

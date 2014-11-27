@@ -2,15 +2,23 @@ package com.example.osmeuslugares;
 
 import android.app.ListActivity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.view.ContextMenu;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.widget.ListView;
+import android.widget.Toast;
+import android.widget.AdapterView.AdapterContextMenuInfo;
 
 public class ListLugares extends ListActivity {
 
 	private ListLugaresAdapter listLugaresAdapter;
+	Bundle extras = new Bundle();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -19,12 +27,27 @@ public class ListLugares extends ListActivity {
 
 		listLugaresAdapter = new ListLugaresAdapter(this);
 		setListAdapter(listLugaresAdapter);
+
+		leerPreferenciaInfo();
 	}
 
-	public void imageButtonAddLugarOnClick(View v) {
-		Bundle extras = new Bundle();
-		extras.putBoolean("add", true);
-		lanzarEditLugar(extras);
+	private void leerPreferenciaInfo() {
+		/* Leer preferencia de info */
+		boolean infoAmpliada = getPreferenciaVerInfoAmpliada();
+		if (infoAmpliada) {
+			Toast.makeText(getBaseContext(), "Info Ampliada ON",
+					Toast.LENGTH_LONG).show();
+		} else {
+			Toast.makeText(getBaseContext(), "Info Ampliada OFF",
+					Toast.LENGTH_LONG).show();
+		}
+	}
+
+	public boolean getPreferenciaVerInfoAmpliada() {
+		SharedPreferences preferencias = PreferenceManager
+				.getDefaultSharedPreferences(getBaseContext());
+		return preferencias.getBoolean("ver_info_ampliada", false);
+
 	}
 
 	@Override
@@ -40,7 +63,22 @@ public class ListLugares extends ListActivity {
 		Intent i = new Intent(this, EditLugarActivity.class);
 		i.putExtras(extras);
 		startActivity(i);
+		// startActivityForResult(i, 1234); //Preguntar a
+		// Gabino..................................................................
 	}
+
+	// @Override
+	// protected void onActivityResult(int requestCode, int resultCode, Intent
+	// data) {
+	// // TODO Auto-generated method stub
+	// super.onActivityResult(requestCode, resultCode, data);
+	// if (requestCode == 1234 && resultCode == RESULT_OK) {
+	// String resultado = data.getExtras().getString("resultado");
+	// Toast.makeText(getBaseContext(), resultado, Toast.LENGTH_LONG)
+	// .show();
+	//
+	// }
+	// }
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -51,10 +89,42 @@ public class ListLugares extends ListActivity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		int id = item.getItemId();
-		if (id == R.id.action_settings) {
+		if (id == R.id.add_lugar) {
+			extras.clear();
+			extras.putBoolean("add", true);
+			lanzarEditLugar(extras);
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+
+	@Override
+	public void onCreateContextMenu(ContextMenu menu, View v,
+			ContextMenuInfo menuInfo) {
+		super.onCreateContextMenu(menu, v, menuInfo);
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.list_lugares_contextual, menu);
+	}
+
+	@Override
+	public boolean onContextItemSelected(MenuItem item) {
+		AdapterContextMenuInfo info = (AdapterContextMenuInfo) item
+				.getMenuInfo();
+		Lugar lugar = (Lugar) listLugaresAdapter.getItem(info.position);
+		switch (item.getItemId()) {
+		case R.id.edit_lugar:
+			Toast.makeText(getBaseContext(), "Editar: " + lugar.getNombre(),
+					Toast.LENGTH_SHORT).show();
+			return true;
+
+		case R.id.delete_lugar:
+			Toast.makeText(getBaseContext(), "Eliminar: " + lugar.getNombre(),
+					Toast.LENGTH_SHORT).show();
+			return true;
+
+		default:
+			return super.onOptionsItemSelected(item);
+		}
 	}
 
 	@Override

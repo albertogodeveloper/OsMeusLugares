@@ -108,7 +108,7 @@ public class LugaresDb extends SQLiteOpenHelper {
 			lugar.setId(cursor.getLong(0));
 			lugar.setNombre(cursor.getString(cursor
 					.getColumnIndex(Lugar.C_NOMBRE)));
-			Long idCategoria = cursor.getLong(cursor
+			int idCategoria = cursor.getInt(cursor
 					.getColumnIndex(Lugar.C_CATEGORIA_ID));
 			String nombreCategoria = cursor.getString(cursor
 					.getColumnIndex(Categoria.C_NOMBRE));
@@ -133,11 +133,11 @@ public class LugaresDb extends SQLiteOpenHelper {
 		Cursor cursor = db.rawQuery(
 				"SELECT * FROM Categoria ORDER By cat_nombre", null);
 		// Como es para un spinner incluir una primera opción por defecto
-		resultado.add(new Categoria(0L, "Seleccionar..."));
+		resultado.add(new Categoria(0, "Seleccionar..."));
 		while (cursor.moveToNext()) {
 			Categoria categoria = new Categoria();
-			categoria.setId(cursor.getLong(cursor
-					.getColumnIndex(Categoria.C_ID)));
+			categoria
+					.setId(cursor.getInt(cursor.getColumnIndex(Categoria.C_ID)));
 			categoria.setNombre(cursor.getString(cursor
 					.getColumnIndex(Categoria.C_NOMBRE)));
 			resultado.add(categoria);

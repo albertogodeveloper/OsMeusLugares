@@ -134,8 +134,9 @@ public class EditLugarActivity extends Activity {
 
 		int position = 0;
 		if (!add) {
-			position = categoriasAdapter.getPositionById(lugarEdit
-					.getCategoria().getId());
+			position = categoriasAdapter.getPositionById(lugarEdit.getCategoria().getId());
+			Toast.makeText(getBaseContext(), "position="+position,
+					Toast.LENGTH_LONG).show();
 		}
 		spinnerCategoria.setSelection(position);
 		editTextCiudad.setText(lugarEdit.getCiudad());
@@ -159,4 +160,12 @@ public class EditLugarActivity extends Activity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
+	
+//	public void buttonGuardarOnClick(View v) {
+//		// TODO Auto-generated method stub
+//		Intent i=new Intent();
+//		i.putExtra("resultado", "RESULTADO..");
+//		setResult(RESULT_OK, i);
+//		finish();
+//	}
 }

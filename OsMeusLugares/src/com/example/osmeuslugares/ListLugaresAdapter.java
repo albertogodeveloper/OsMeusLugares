@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class ListLugaresAdapter extends BaseAdapter {
@@ -48,13 +49,45 @@ public class ListLugaresAdapter extends BaseAdapter {
 		LayoutInflater inflater = activity.getLayoutInflater();
 		View view = inflater.inflate(R.layout.elemento_lista, null, true);
 
-		TextView textViewTitulo = (TextView) view
-				.findViewById(R.id.textViewTitulo);
-		TextView textViewInfo = (TextView) view.findViewById(R.id.textViewInfo);
-		Lugar lugar = (Lugar) lista.elementAt(position);
-		textViewTitulo.setText(lugar.getNombre());
-		textViewInfo.setText(lugar.toString());
+		cargaDatos(position, view);
 		return view;
 	}
 
+	private void cargaDatos(int position, View view) {
+		TextView textViewTitulo = (TextView) view.findViewById(R.id.textViewTitulo);
+		TextView txtNombre = (TextView) view.findViewById(R.id.tvNombre);
+		TextView txtLugar = (TextView) view.findViewById(R.id.tvTipo);
+		TextView txtDireccion = (TextView) view.findViewById(R.id.tvDireccion);
+		TextView txtCiudad = (TextView) view.findViewById(R.id.tvCiudad);
+		TextView txtUrl = (TextView) view.findViewById(R.id.tvUrl);
+		TextView txtTelf = (TextView) view.findViewById(R.id.tvTelefono);
+		TextView txtComent = (TextView) view.findViewById(R.id.tvComentario);
+
+		Lugar lugar = (Lugar) lista.elementAt(position);
+		int id = lugar.getCategoria().getId();
+		ImageView icono = (ImageView) view.findViewById(R.id.icono);
+		switch (id) {
+		case 1:
+			icono.setImageResource(R.drawable.ic_playas);
+			break;
+		case 2:
+			icono.setImageResource(R.drawable.ic_restaurantes);
+			break;
+		case 3:
+			icono.setImageResource(R.drawable.ic_hoteles);
+			break;
+		default:
+			icono.setImageResource(R.drawable.ic_otros);
+			break;
+		}
+
+		textViewTitulo.setText(lugar.getNombre());
+		txtNombre.setText(lugar.getNombre());
+		txtLugar.setText(lugar.getCategoria().getNombre());
+		txtDireccion.setText(lugar.getDireccion());
+		txtCiudad.setText(lugar.getCiudad());
+		txtUrl.setText(lugar.getUrl());
+		txtTelf.setText(lugar.getTelefono());
+		txtComent.setText(lugar.getComentario());
+	}
 }

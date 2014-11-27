@@ -2,7 +2,7 @@
 <resources>
 
     <string name="app_name">Os Meus Lugares</string>
-    <string name="hello_world">Hello world!</string>
+    <string name="hello_world">Hola Mundo!</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_list_lugares">ListLugares</string>
     <string name="title_activity_acerca_de">AcercaDeActivity</string>
@@ -38,5 +38,10 @@
     <string name="listadodesitios">Listado de Sitios</string>
     <string name="nohaysitios">No hay sitios</string>
     <string name="eliminar">Eliminar</string>
+    <string name="add_lugar">Añadir Lugar</string>
+    <string name="edit_lugar">Editar Lugar</string>
+    <string name="edit_delete">Eliminar Lugar</string>
+    <string name="title_preferencias">Preferencias</string>
+    <string name="cerrar">Cerrar</string>
 
 </resources>

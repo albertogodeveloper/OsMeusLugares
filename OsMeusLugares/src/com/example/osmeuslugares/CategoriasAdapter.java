@@ -42,6 +42,7 @@ public class CategoriasAdapter extends BaseAdapter {
 		return lista.elementAt(position);
 	}
 
+	//Mirar por qué fallaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 	@Override
 	public long getItemId(int position) {
 		
@@ -59,7 +60,7 @@ public class CategoriasAdapter extends BaseAdapter {
 		
 	}
 	
-	public int getPositionById(Long id) {
+	public int getPositionById(int id) {
 		//Buscar en lista 
 		Categoria buscar = new Categoria();
 		buscar.setId(id);

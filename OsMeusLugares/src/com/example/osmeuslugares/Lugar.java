@@ -191,7 +191,7 @@ public class Lugar {
 
 		id = bundle.getLong(C_ID);
 		nombre = bundle.getString(C_NOMBRE);
-		categoria = new Categoria(bundle.getLong(C_CATEGORIA_ID),
+		categoria = new Categoria(bundle.getInt(C_CATEGORIA_ID),
 				bundle.getString(Categoria.C_NOMBRE));
 		ciudad = bundle.getString(C_CIUDAD);
 		direccion = bundle.getString(C_DIRECCION);

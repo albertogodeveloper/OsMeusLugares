@@ -1,7 +1,7 @@
 package com.example.osmeuslugares;
 
 public class Categoria {
-	private Long id;
+	private int id;
 	private String nombre;
 	// private String icon;
 
@@ -22,7 +22,7 @@ public class Categoria {
 	 * @param id
 	 * @param nombre
 	 */
-	public Categoria(Long id, String nombre) {
+	public Categoria(int id, String nombre) {
 		super();
 		this.id = id;
 		this.nombre = nombre;
@@ -39,7 +39,7 @@ public class Categoria {
 	/**
 	 * @return the id
 	 */
-	public Long getId() {
+	public int getId() {
 		return id;
 	}
 
@@ -47,7 +47,7 @@ public class Categoria {
 	 * @param id
 	 *            the id to set
 	 */
-	public void setId(Long id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 
