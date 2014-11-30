@@ -13,13 +13,13 @@
     <string name="Lugar">Lugar</string>
     <string name="Editar">Editar</string>
     <string name="estasenlugares">Estás en lugares</string>
-    <string name="inicio">Estas en inicio</string>
+    <string name="inicio">Estás en inicio</string>
     <string name="preferencias">Preferencias</string>
-    <string name="listado_lugares">listado_lugares</string>
+    <string name="listado_lugares">Listado De Lugares</string>
     <string name="nohaylugares">No hay lugares</string>
     <string name="anadir">Añadir</string>
     <string name="alberto">Alberto García Olivero ®</string>
-    <string name="app">Esta mierda de aplicación fue desarrollada por:</string>
+    <string name="app">Esta aplicación fue desarrollada por:</string>
     <string name="lugares">Lugares</string>
     <string name="guardar">Guardar</string>
     <string name="nombredellugar">Nombre del lugar</string>
@@ -43,5 +43,6 @@
     <string name="edit_delete">Eliminar Lugar</string>
     <string name="title_preferencias">Preferencias</string>
     <string name="cerrar">Cerrar</string>
+    <string name="osmeuslugares">Os Meus Lugares</string>
 
 </resources>

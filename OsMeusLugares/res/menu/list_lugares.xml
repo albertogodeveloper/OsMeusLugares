@@ -4,9 +4,9 @@
 
     <item
         android:id="@+id/add_lugar"
-        android:orderInCategory="100"
+        android:orderInCategory="1"
         android:showAsAction="always"
         android:title="@string/add_lugar" android:visible="true" android:icon="@android:drawable/ic_menu_add"/>
-    <item android:id="@+id/cerrar" android:title="@string/cerrar" android:icon="@android:drawable/ic_menu_close_clear_cancel" android:visible="true" android:showAsAction="always"></item>
+    <item android:id="@+id/cerrar" android:title="@string/cerrar" android:icon="@android:drawable/ic_menu_close_clear_cancel" android:visible="true" android:showAsAction="always" android:orderInCategory="2"></item>
 
 </menu>

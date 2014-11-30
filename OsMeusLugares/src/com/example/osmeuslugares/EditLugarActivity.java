@@ -1,6 +1,8 @@
 package com.example.osmeuslugares;
 
+import android.app.ActionBar;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,7 +24,7 @@ public class EditLugarActivity extends Activity {
 	private TextView editTextTelefono;
 	private TextView editTextUrl;
 	private TextView editTextComentario;
-	private Button btnEliminar;
+	//private MenuItem btnEliminar;
 	CategoriasAdapter categoriasAdapter;
 	private boolean add;
 
@@ -30,8 +32,10 @@ public class EditLugarActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_edit_lugar);
-		// Botón eliminar para usar visibilidad.
-		btnEliminar = (Button) findViewById(R.id.btnEliminar);
+		// Botón eliminar para usar visibilidad,si va ser para crear un lugar no
+		// se muestra el boton.
+		//btnEliminar = (MenuItem) findViewById(R.id.eliminar_edLugar);
+		// btnEliminar = (Button) findViewById(R.id.btnEliminar);---------------------------------------------------------------------------------
 		// Nombre
 		editTextNombre = (TextView) findViewById(R.id.editNombre);
 		// Categoria
@@ -56,32 +60,16 @@ public class EditLugarActivity extends Activity {
 		if (add) {
 			Toast.makeText(getBaseContext(), "CREAR NUEVO LUGAR",
 					Toast.LENGTH_LONG).show();
-
+			//btnEliminar.setEnabled(false);
 		} else {
 			Toast.makeText(getBaseContext(),
 					"EDITAR " + extras.getString(Lugar.C_NOMBRE),
 					Toast.LENGTH_LONG).show();
-			btnEliminar.setVisibility(Button.VISIBLE);
 			lugarEdit.setBundle(extras);
 		}
 
 		// Establecer valores desde lugarEdit a widget edición
 		establecerValoresEditar();
-
-	}
-
-	public void onButtonClickGuardar(View v) {
-		if (add) {
-			crearLugarEnBd();
-		} else {
-			actualizarLugarEnBd();
-		}
-		finish();
-	}
-
-	public void onButtonClickEliminar(View v) {
-		eliminarLugarEnBd();
-		finish();
 	}
 
 	private void crearLugarEnBd() {
@@ -103,16 +91,17 @@ public class EditLugarActivity extends Activity {
 	}
 
 	private Lugar getLugarDesdeCampos() {
+		
 		lugarNuevo = new Lugar();
 		lugarNuevo.setNombre(editTextNombre.getText().toString());
 		int position = spinnerCategoria.getSelectedItemPosition();
-		lugarNuevo
-				.setCategoria((Categoria) categoriasAdapter.getItem(position));
+		lugarNuevo.setCategoria((Categoria) categoriasAdapter.getItem(position));
 		lugarNuevo.setCiudad(editTextCiudad.getText().toString());
 		lugarNuevo.setDireccion(editTextDireccion.getText().toString());
 		lugarNuevo.setTelefono(editTextTelefono.getText().toString());
 		lugarNuevo.setUrl(editTextUrl.getText().toString());
 		lugarNuevo.setComentario(editTextComentario.getText().toString());
+		
 		return lugarNuevo;
 	}
 
@@ -135,8 +124,6 @@ public class EditLugarActivity extends Activity {
 		int position = 0;
 		if (!add) {
 			position = categoriasAdapter.getPositionById(lugarEdit.getCategoria().getId());
-			Toast.makeText(getBaseContext(), "position="+position,
-					Toast.LENGTH_LONG).show();
 		}
 		spinnerCategoria.setSelection(position);
 		editTextCiudad.setText(lugarEdit.getCiudad());
@@ -155,17 +142,50 @@ public class EditLugarActivity extends Activity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		int id = item.getItemId();
-		if (id == R.id.action_settings) {
-			return true;
+		switch (id) {
+		case R.id.guardar_edLugar: {
+			if (comprobarCatSeleccionada()) {
+				if (add) {
+					crearLugarEnBd();
+				} else {
+					actualizarLugarEnBd();
+				}
+				finish();	
+			}else{
+				alertaSimple("Tipo Lugar", "Debe de seleccionar una categoria para poder continuar");
+			}
+			
+			break;
+		}
+		case R.id.eliminar_edLugar: {
+			eliminarLugarEnBd();
+			finish();
+			break;
+		}
+		case R.id.cerrar_edLugar: {
+			finish();
+			break;
+		}
 		}
 		return super.onOptionsItemSelected(item);
 	}
+
+	private Boolean comprobarCatSeleccionada() {
+		int position = spinnerCategoria.getSelectedItemPosition();
+		if (position == 0) {
+			return false;
+		}else{
+			return true;
+		}
+	}
 	
-//	public void buttonGuardarOnClick(View v) {
-//		// TODO Auto-generated method stub
-//		Intent i=new Intent();
-//		i.putExtra("resultado", "RESULTADO..");
-//		setResult(RESULT_OK, i);
-//		finish();
-//	}
+	
+	private void alertaSimple(String titulo, String mensaje) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setTitle(titulo);
+		builder.setMessage(mensaje);
+		builder.setPositiveButton("OK", null);
+		builder.create();
+		builder.show();
+	}
 }

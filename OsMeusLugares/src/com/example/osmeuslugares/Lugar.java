@@ -78,21 +78,6 @@ public class Lugar {
 	}
 
 	/**
-	 * @return the direccion
-	 */
-	public String getDireccion() {
-		return direccion;
-	}
-
-	/**
-	 * @param direccion
-	 *            the direccion to set
-	 */
-	public void setDireccion(String direccion) {
-		this.direccion = direccion;
-	}
-
-	/**
 	 * @return the ciudad
 	 */
 	public String getCiudad() {
@@ -105,6 +90,21 @@ public class Lugar {
 	 */
 	public void setCiudad(String ciudad) {
 		this.ciudad = ciudad;
+	}
+
+	/**
+	 * @return the direccion
+	 */
+	public String getDireccion() {
+		return direccion;
+	}
+
+	/**
+	 * @param direccion
+	 *            the direccion to set
+	 */
+	public void setDireccion(String direccion) {
+		this.direccion = direccion;
 	}
 
 	/**
@@ -164,7 +164,6 @@ public class Lugar {
 		ContentValues reg = new ContentValues();
 		reg.put(C_NOMBRE, nombre);
 		reg.put(C_CATEGORIA_ID, categoria.getId());
-		// reg.put(Categoria.C_NOMBRE, categoria.getNombre());
 		reg.put(C_DIRECCION, direccion);
 		reg.put(C_CIUDAD, ciudad);
 		reg.put(C_URL, url);
@@ -177,8 +176,9 @@ public class Lugar {
 		Bundle bundle = new Bundle();
 		bundle.putLong(C_ID, id);
 		bundle.putString(C_NOMBRE, nombre);
-		bundle.putLong(C_CATEGORIA_ID, categoria.getId());
+		bundle.putInt(C_CATEGORIA_ID, categoria.getId());
 		bundle.putString(Categoria.C_NOMBRE, categoria.getNombre());
+		bundle.putString(Categoria.C_ICONO, categoria.getIcono());
 		bundle.putString(C_DIRECCION, direccion);
 		bundle.putString(C_CIUDAD, ciudad);
 		bundle.putString(C_URL, url);
@@ -188,11 +188,9 @@ public class Lugar {
 	}
 
 	void setBundle(Bundle bundle) {
-
 		id = bundle.getLong(C_ID);
 		nombre = bundle.getString(C_NOMBRE);
-		categoria = new Categoria(bundle.getInt(C_CATEGORIA_ID),
-				bundle.getString(Categoria.C_NOMBRE));
+		categoria = new Categoria(bundle.getInt(C_CATEGORIA_ID),bundle.getString(Categoria.C_NOMBRE),bundle.getString(Categoria.C_ICONO));
 		ciudad = bundle.getString(C_CIUDAD);
 		direccion = bundle.getString(C_DIRECCION);
 		url = bundle.getString(C_URL);

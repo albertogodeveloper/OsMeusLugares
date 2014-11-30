@@ -3,37 +3,26 @@ package com.example.osmeuslugares;
 public class Categoria {
 	private int id;
 	private String nombre;
-	// private String icon;
+	private String icono;
 
 	/* Mapeo BBDD */
 	// Campos Base de Datos Tabla Lugar
 	public static final String C_ID = "cat_id";
 	public static final String C_NOMBRE = "cat_nombre";
+	public static final String C_ICONO = "cat_icono";
 
 	/**
-	 * Constructor
+	 * Constructores
 	 */
 	public Categoria() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
-	/**
-	 * @param id
-	 * @param nombre
-	 */
-	public Categoria(int id, String nombre) {
+	public Categoria(int id, String nombre, String icono) {
 		super();
 		this.id = id;
 		this.nombre = nombre;
-	}
-
-	/**
-	 * @param nombre
-	 *            the nombre to set
-	 */
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
+		this.icono = icono;
 	}
 
 	/**
@@ -60,20 +49,25 @@ public class Categoria {
 
 	/**
 	 * @param nombre
-	 *            the Nombre to set
+	 *            the nombre to set
 	 */
-	public void setCategoria(String nombre) {
+	public void setNombre(String nombre) {
 		this.nombre = nombre;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#toString()
+	/**
+	 * @return the icono
 	 */
-	@Override
-	public String toString() {
-		return "Categoria [id=" + id + ", nombre=" + nombre + "]";
+	public String getIcono() {
+		return icono;
+	}
+
+	/**
+	 * @param icono
+	 *            the icono to set
+	 */
+	public void setIcono(String icono) {
+		this.icono = icono;
 	}
 
 	/*

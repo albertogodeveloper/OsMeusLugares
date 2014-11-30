@@ -52,7 +52,7 @@ public class LugaresDb extends SQLiteOpenHelper {
 	private void crearTablaCategoria(SQLiteDatabase db) {
 		sql = "CREATE TABLE Categoria("
 				+ "cat_id INTEGER PRIMARY KEY AUTOINCREMENT, "
-				+ "cat_nombre TEXT NOT NULL);";
+				+ "cat_nombre TEXT NOT NULL, " + "cat_icono TEXT);";
 
 		db.execSQL(sql);
 
@@ -62,15 +62,20 @@ public class LugaresDb extends SQLiteOpenHelper {
 
 	private void insertarLugaresPrueba() {
 		db.execSQL("INSERT INTO Categoria(cat_nombre) " + "VALUES('Playas')");
-		db.execSQL("INSERT INTO Categoria(cat_nombre) "
-				+ "VALUES('Restaurantes')");
+		db.execSQL("INSERT INTO Categoria(cat_nombre) " + "VALUES('Restaurantes')");
 		db.execSQL("INSERT INTO Categoria(cat_nombre) " + "VALUES('Hoteles')");
 		db.execSQL("INSERT INTO Categoria(cat_nombre) " + "VALUES('Otros')");
 
 		db.execSQL("INSERT INTO Lugar(lug_nombre, lug_categoria_id, lug_direccion, lug_ciudad, lug_telefono, lug_url, lug_comentario) "
-				+ "VALUES('Praia de Riazor',1, 'Riazor','A Coru–a','981000000','','')");
+				+ "VALUES('Praia de Riazor',1, 'Riazor','A Coruña','981000000','www.praiariazor.com','Playa con mucho oleaje.')");
 		db.execSQL("INSERT INTO Lugar(lug_nombre, lug_categoria_id, lug_direccion, lug_ciudad, lug_telefono, lug_url, lug_comentario) "
-				+ "VALUES('Praia do Orzan',1, 'Orzan','A Coru–a','981000000','','')");
+				+ "VALUES('Praia do Orzan',1, 'Orzan','A Coruña','981000000','www.praiaorzan.com','Preciosas vistas a las discotecas...')");
+		db.execSQL("INSERT INTO Lugar(lug_nombre, lug_categoria_id, lug_direccion, lug_ciudad, lug_telefono, lug_url, lug_comentario) "
+				+ "VALUES('Mesón Suso',2, 'Av de Madrid,6','Lugo','981000000','www.mesonsuso.com','Un buen sitio para comer carne a la brasa.')");
+		db.execSQL("INSERT INTO Lugar(lug_nombre, lug_categoria_id, lug_direccion, lug_ciudad, lug_telefono, lug_url, lug_comentario) "
+				+ "VALUES('Hotel Paraiso',3, 'Av Buenos Aires,10','Vigo','986123456','www.hparaiso.com','Un lugar perfecto para dormir una siesta.')");
+		db.execSQL("INSERT INTO Lugar(lug_nombre, lug_categoria_id, lug_direccion, lug_ciudad, lug_telefono, lug_url, lug_comentario) "
+				+ "VALUES('Club El Descanso',4, 'Carretera de Orense, s/n','Ourense','988000000','www.clubdescanso.com','Un lugar muy acojedor...')");
 		Log.i("INFO", "Registros de prueba insertados");
 	}
 
@@ -97,31 +102,26 @@ public class LugaresDb extends SQLiteOpenHelper {
 	public Vector<Lugar> cargarLugaresDesdeBD() {
 		Vector<Lugar> resultado = new Vector<Lugar>();
 		SQLiteDatabase db = this.getReadableDatabase();
-		Cursor cursor = db.rawQuery("SELECT Lugar.*, cat_nombre "
-				+ "FROM Lugar join Categoria on lug_categoria_id = cat_id",
+		Cursor cursor = db.rawQuery("SELECT Lugar.*, cat_nombre, cat_icono " + "FROM Lugar join Categoria on lug_categoria_id = cat_id",
 				null);
 		// Se podría usar query() en vez de rawQuery
-		// join para recoger nombre categoria, previamente crear tabla de
-		// categorias
+		// join para recoger nombre categoria, previamente crear tabla de categorias.
+		
 		while (cursor.moveToNext()) {
 			Lugar lugar = new Lugar();
-			lugar.setId(cursor.getLong(0));
-			lugar.setNombre(cursor.getString(cursor
-					.getColumnIndex(Lugar.C_NOMBRE)));
-			int idCategoria = cursor.getInt(cursor
-					.getColumnIndex(Lugar.C_CATEGORIA_ID));
-			String nombreCategoria = cursor.getString(cursor
-					.getColumnIndex(Categoria.C_NOMBRE));
-			lugar.setCategoria(new Categoria(idCategoria, nombreCategoria));
-			lugar.setDireccion(cursor.getString(cursor
-					.getColumnIndex(Lugar.C_DIRECCION)));
-			lugar.setCiudad(cursor.getString(cursor
-					.getColumnIndex(Lugar.C_CIUDAD)));
-			lugar.setTelefono(cursor.getString(cursor
-					.getColumnIndex(Lugar.C_TELEFONO)));
+			lugar.setId(cursor.getLong(0));//Por qué le asigna un cero?????????????????????????????????????
+			lugar.setNombre(cursor.getString(cursor.getColumnIndex(Lugar.C_NOMBRE)));
+			int idCategoria = cursor.getInt(cursor.getColumnIndex(Lugar.C_CATEGORIA_ID));
+			String nombreCategoria = cursor.getString(cursor.getColumnIndex(Categoria.C_NOMBRE));
+			String iconoCategoria = cursor.getString(cursor.getColumnIndex(Categoria.C_ICONO));
+			
+			lugar.setCategoria(new Categoria(idCategoria, nombreCategoria,iconoCategoria));
+			lugar.setDireccion(cursor.getString(cursor.getColumnIndex(Lugar.C_DIRECCION)));
+			lugar.setCiudad(cursor.getString(cursor.getColumnIndex(Lugar.C_CIUDAD)));
+			lugar.setTelefono(cursor.getString(cursor.getColumnIndex(Lugar.C_TELEFONO)));
 			lugar.setUrl(cursor.getString(cursor.getColumnIndex(Lugar.C_URL)));
-			lugar.setComentario(cursor.getString(cursor
-					.getColumnIndex(Lugar.C_COMENTARIO)));
+			lugar.setComentario(cursor.getString(cursor.getColumnIndex(Lugar.C_COMENTARIO)));
+			
 			resultado.add(lugar);
 		}
 		return resultado;
@@ -130,16 +130,14 @@ public class LugaresDb extends SQLiteOpenHelper {
 	public Vector<Categoria> cargarCategoriasDesdeBD() {
 		Vector<Categoria> resultado = new Vector<Categoria>();
 		SQLiteDatabase db = this.getReadableDatabase();
-		Cursor cursor = db.rawQuery(
-				"SELECT * FROM Categoria ORDER By cat_nombre", null);
+		Cursor cursor = db.rawQuery("SELECT * FROM Categoria ORDER By cat_nombre", null);
 		// Como es para un spinner incluir una primera opción por defecto
-		resultado.add(new Categoria(0, "Seleccionar..."));
+		resultado.add(new Categoria(0, "Seleccionar...",null));
 		while (cursor.moveToNext()) {
 			Categoria categoria = new Categoria();
-			categoria
-					.setId(cursor.getInt(cursor.getColumnIndex(Categoria.C_ID)));
-			categoria.setNombre(cursor.getString(cursor
-					.getColumnIndex(Categoria.C_NOMBRE)));
+			categoria.setId(cursor.getInt(cursor.getColumnIndex(Categoria.C_ID)));
+			categoria.setNombre(cursor.getString(cursor.getColumnIndex(Categoria.C_NOMBRE)));
+			categoria.setIcono(cursor.getString(cursor.getColumnIndex(Categoria.C_ICONO)));
 			resultado.add(categoria);
 		}
 		return resultado;

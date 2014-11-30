@@ -19,11 +19,13 @@ public class ListLugares extends ListActivity {
 
 	private ListLugaresAdapter listLugaresAdapter;
 	Bundle extras = new Bundle();
+	private LugaresDb db = new LugaresDb(this);
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_list_lugares);
+		registerForContextMenu(super.getListView());
 
 		listLugaresAdapter = new ListLugaresAdapter(this);
 		setListAdapter(listLugaresAdapter);
@@ -89,12 +91,19 @@ public class ListLugares extends ListActivity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		int id = item.getItemId();
-		if (id == R.id.add_lugar) {
+		switch (id) {
+		case R.id.add_lugar: {
 			extras.clear();
 			extras.putBoolean("add", true);
 			lanzarEditLugar(extras);
 			return true;
 		}
+		case R.id.cerrar: {
+			finish();
+			break;
+		}
+		}
+
 		return super.onOptionsItemSelected(item);
 	}
 
@@ -108,16 +117,24 @@ public class ListLugares extends ListActivity {
 
 	@Override
 	public boolean onContextItemSelected(MenuItem item) {
-		AdapterContextMenuInfo info = (AdapterContextMenuInfo) item
-				.getMenuInfo();
+		AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
+		 // Obtiene el lugar seleccionado:
 		Lugar lugar = (Lugar) listLugaresAdapter.getItem(info.position);
+
 		switch (item.getItemId()) {
 		case R.id.edit_lugar:
-			Toast.makeText(getBaseContext(), "Editar: " + lugar.getNombre(),
-					Toast.LENGTH_SHORT).show();
+			// Paso el lugar seleccionado a un bundle:
+			Bundle extras = lugar.getBundle();
+			// Le paso un false para que sepa que es para editar y no crear:
+			extras.putBoolean("add", false);
+			// Lanzo editar lugar con el elemento en un bundle:
+			lanzarEditLugar(extras);
+			// Muestro un toast con el nombre del elemento a editar:
+			Toast.makeText(getBaseContext(), "Editar: " + lugar.getNombre(),Toast.LENGTH_SHORT).show();
 			return true;
 
 		case R.id.delete_lugar:
+			eliminarLugarEnBd(lugar);
 			Toast.makeText(getBaseContext(), "Eliminar: " + lugar.getNombre(),
 					Toast.LENGTH_SHORT).show();
 			return true;
@@ -125,6 +142,13 @@ public class ListLugares extends ListActivity {
 		default:
 			return super.onOptionsItemSelected(item);
 		}
+	}
+
+	private void eliminarLugarEnBd(Lugar lugar) {
+		db.deleteLugar(lugar);
+		Toast.makeText(getBaseContext(), "ELIMINADO CORRECTAMENTE",
+				Toast.LENGTH_LONG).show();
+		onRestart();
 	}
 
 	@Override
