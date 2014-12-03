@@ -24,7 +24,7 @@ public class EditLugarActivity extends Activity {
 	private TextView editTextTelefono;
 	private TextView editTextUrl;
 	private TextView editTextComentario;
-	//private MenuItem btnEliminar;
+	private MenuItem btnEliminar;
 	CategoriasAdapter categoriasAdapter;
 	private boolean add;
 
@@ -34,7 +34,7 @@ public class EditLugarActivity extends Activity {
 		setContentView(R.layout.activity_edit_lugar);
 		// Botón eliminar para usar visibilidad,si va ser para crear un lugar no
 		// se muestra el boton.
-		//btnEliminar = (MenuItem) findViewById(R.id.eliminar_edLugar);
+		
 		// btnEliminar = (Button) findViewById(R.id.btnEliminar);---------------------------------------------------------------------------------
 		// Nombre
 		editTextNombre = (TextView) findViewById(R.id.editNombre);
@@ -60,12 +60,15 @@ public class EditLugarActivity extends Activity {
 		if (add) {
 			Toast.makeText(getBaseContext(), "CREAR NUEVO LUGAR",
 					Toast.LENGTH_LONG).show();
-			//btnEliminar.setEnabled(false);
+			
 		} else {
+//			btnEliminar = (MenuItem) findViewById(R.id.eliminar_edLugar);
+			btnEliminar.setVisible(true);
 			Toast.makeText(getBaseContext(),
 					"EDITAR " + extras.getString(Lugar.C_NOMBRE),
 					Toast.LENGTH_LONG).show();
 			lugarEdit.setBundle(extras);
+			
 		}
 
 		// Establecer valores desde lugarEdit a widget edición

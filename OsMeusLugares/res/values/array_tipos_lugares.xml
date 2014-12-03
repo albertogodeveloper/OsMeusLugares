@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="lista_tipos">
-        <item >Praia</item>
+        <item >Playa</item>
         <item >Restaurante</item>
-        <item >Outro</item>
+        <item >Hotel</item>
+        <item >Otros</item>
     </string-array>
     
 </resources>

@@ -3,6 +3,7 @@ package com.example.osmeuslugares;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -14,6 +15,7 @@ import android.widget.Toast;
 public class MainActivity extends Activity {
 
 	LugaresDb lugaresDb;
+	MediaPlayer musica;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -27,8 +29,9 @@ public class MainActivity extends Activity {
 
 		Toast.makeText(getBaseContext(), "Base de datos preparada",
 				Toast.LENGTH_LONG).show();
-
-		leerPreferenciaMusica();
+		
+		this.musica= MediaPlayer.create(this, R.raw.musica_fondo);
+		
 	}
 
 	private void leerPreferenciaMusica() {
@@ -37,9 +40,12 @@ public class MainActivity extends Activity {
 		if (reproducirMusica) {
 			Toast.makeText(getBaseContext(), "Música ON", Toast.LENGTH_LONG)
 					.show();
+			
+			musica.start();
 		} else {
 			Toast.makeText(getBaseContext(), "Musica OFF", Toast.LENGTH_LONG)
 					.show();
+			musica.stop();
 		}
 	}
 
@@ -54,6 +60,25 @@ public class MainActivity extends Activity {
 
 		Intent i = new Intent(this, ListLugares.class);
 		startActivity(i);
+	}
+	
+
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onStart()
+	 */
+	@Override
+	protected void onStart() {
+		leerPreferenciaMusica();
+		super.onStart();
+	}
+
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onStop()
+	 */
+	@Override
+	protected void onStop() {
+		musica.stop();
+		super.onStop();
 	}
 
 	@Override

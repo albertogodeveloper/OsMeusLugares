@@ -1,5 +1,7 @@
 package com.example.osmeuslugares;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Vector;
 import android.content.Context;
 import android.database.Cursor;
@@ -7,6 +9,7 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.graphics.drawable.Drawable;
 import android.util.Log;
 
 public class LugaresDb extends SQLiteOpenHelper {
@@ -161,4 +164,23 @@ public class LugaresDb extends SQLiteOpenHelper {
 		// Eliminamos el registro de la base de datos.
 		db.delete("Lugar", "lug_id=" + lugarDel.getId(), null);
 	}
+	
+	
+//			// Cargar recursos iconos
+//			res = activity.getResources();
+//			drawableIconosLugares = res
+//					.obtainTypedArray(R.array.drawable_iconos_lugares);
+//			
+//			valoresIconosLugares = (List<String>) Arrays.asList(res
+//					.getStringArray(R.array.valores_iconos_lugares));
+//			
+//			//jjjjjjjjjjjjjjj
+//			public Drawable obtenDrawableIcon(String icon) {
+//				// Buscamos la posici—n de icon
+//				int posicion = valoresIconosLugares.indexOf(icon);
+//				// -1 si no existe lo ponemos a 0 (icono ND: No Definido)
+//				if (posicion == -1)
+//					posicion = 0;
+//				return drawableIconosLugares.getDrawable(posicion);
+//			}
 }

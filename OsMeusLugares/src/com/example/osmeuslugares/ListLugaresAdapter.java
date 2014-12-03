@@ -3,7 +3,10 @@ package com.example.osmeuslugares;
 import java.util.Vector;
 
 import android.app.Activity;
+import android.content.res.Resources;
+import android.content.res.TypedArray;
 import android.database.SQLException;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -66,6 +69,10 @@ public class ListLugaresAdapter extends BaseAdapter {
 		Lugar lugar = (Lugar) lista.elementAt(position);
 		int id = lugar.getCategoria().getId();
 		ImageView icono = (ImageView) view.findViewById(R.id.icono);
+		
+		//Iconos del xml...............................
+		lugar.getCategoria().getIcono();
+		
 		switch (id) {
 		case 1:
 			icono.setImageResource(R.drawable.ic_playas);
@@ -89,5 +96,14 @@ public class ListLugaresAdapter extends BaseAdapter {
 		txtUrl.setText(lugar.getUrl());
 		txtTelf.setText(lugar.getTelefono());
 		txtComent.setText(lugar.getComentario());
+	}
+	
+	private Drawable obtenerDrawableIcon(String icon) {
+		Resources res = activity.getResources();
+		TypedArray iconosLugares = res.obtainTypedArray(R.array.iconos_lugares);
+
+		TypedArray nombresIconos = res.obtainTypedArray(R.array.lista_tipos);
+		//Obtener la posición de icon en el array.
+		return iconosLugares.getDrawable(0);
 	}
 }
