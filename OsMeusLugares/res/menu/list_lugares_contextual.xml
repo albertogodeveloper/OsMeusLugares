@@ -2,11 +2,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.example.osmeuslugares.ListLugares" >
 
-    <item
+    <item android:id="@+id/web_lugar" android:title="@string/ir_web" android:showAsAction="always" android:orderInCategory="1"></item><item
         android:id="@+id/edit_lugar"
-        android:orderInCategory="100"
+        android:orderInCategory="2"
         android:showAsAction="always"
         android:title="@string/edit_lugar" android:visible="true" android:icon="@android:drawable/ic_menu_edit"/>
-    <item android:id="@+id/delete_lugar" android:icon="@android:drawable/ic_menu_delete" android:title="@string/edit_delete" android:visible="true" android:showAsAction="always"></item>
+    <item android:id="@+id/delete_lugar" android:icon="@android:drawable/ic_menu_delete" android:title="@string/edit_delete" android:visible="true" android:showAsAction="always" android:orderInCategory="3"></item>
+    
 
 </menu>

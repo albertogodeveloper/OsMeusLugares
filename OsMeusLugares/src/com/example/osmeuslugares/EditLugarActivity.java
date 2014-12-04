@@ -24,7 +24,7 @@ public class EditLugarActivity extends Activity {
 	private TextView editTextTelefono;
 	private TextView editTextUrl;
 	private TextView editTextComentario;
-	private MenuItem btnEliminar;
+	//private MenuItem btnEliminar;
 	CategoriasAdapter categoriasAdapter;
 	private boolean add;
 
@@ -63,7 +63,7 @@ public class EditLugarActivity extends Activity {
 			
 		} else {
 //			btnEliminar = (MenuItem) findViewById(R.id.eliminar_edLugar);
-			btnEliminar.setVisible(true);
+			//btnEliminar.setVisible(true);
 			Toast.makeText(getBaseContext(),
 					"EDITAR " + extras.getString(Lugar.C_NOMBRE),
 					Toast.LENGTH_LONG).show();

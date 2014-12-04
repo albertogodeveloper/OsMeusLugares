@@ -40,7 +40,7 @@ public class MainActivity extends Activity {
 		if (reproducirMusica) {
 			Toast.makeText(getBaseContext(), "Música ON", Toast.LENGTH_LONG)
 					.show();
-			
+			this.musica= MediaPlayer.create(this, R.raw.musica_fondo);
 			musica.start();
 		} else {
 			Toast.makeText(getBaseContext(), "Musica OFF", Toast.LENGTH_LONG)
@@ -58,7 +58,7 @@ public class MainActivity extends Activity {
 
 	public void onButtonClickLugar(View v) {
 
-		Intent i = new Intent(this, ListLugares.class);
+		Intent i = new Intent(this, ListLugaresActivity.class);
 		startActivity(i);
 	}
 	
@@ -99,7 +99,10 @@ public class MainActivity extends Activity {
 		case R.id.listLugares: {
 			lanzarListadoLugares();
 			break;
-		}
+		}case R.id.listCategorias: {
+			lanzarListadoCategorias();
+			break;
+		}		
 		case R.id.action_settings: {
 			lanzarPrefencias();
 			break;
@@ -112,6 +115,8 @@ public class MainActivity extends Activity {
 		return super.onOptionsItemSelected(item);
 	}
 
+	
+
 	private void lanzarPrefencias() {
 		Intent i = new Intent(this, PreferenciasActivity.class);
 		startActivity(i);
@@ -119,9 +124,13 @@ public class MainActivity extends Activity {
 	}
 
 	private void lanzarListadoLugares() {
-		Intent i = new Intent(this, ListLugares.class);
+		Intent i = new Intent(this, ListLugaresActivity.class);
 		startActivity(i);
 
+	}
+	private void lanzarListadoCategorias() {
+		Intent i = new Intent(this, ListCategoriasActivity.class);
+		startActivity(i);		
 	}
 
 	private void lanzarAcercaDe() {

@@ -44,5 +44,13 @@
     <string name="title_preferencias">Preferencias</string>
     <string name="cerrar">Cerrar</string>
     <string name="osmeuslugares">Os Meus Lugares</string>
+    <string name="title_activity_list_categorias">Lista de categorias</string>
+    <string name="title_activity_edit_categoria">Editar Categoria</string>
+    <string name="listado_categorias">Listado de Categorias</string>
+    <string name="add_categoria">Añadir Categoria</string>
+    <string name="icono">Icono</string>
+    <string name="edit_categoria">Editar Categoria</string>
+    <string name="del_categoria">Eliminar Categoria</string>
+    <string name="ir_web">Ir a web</string>
 
 </resources>

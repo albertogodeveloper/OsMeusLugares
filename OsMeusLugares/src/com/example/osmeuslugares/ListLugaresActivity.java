@@ -3,6 +3,7 @@ package com.example.osmeuslugares;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.ContextMenu;
@@ -15,7 +16,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 
-public class ListLugares extends ListActivity {
+public class ListLugaresActivity extends ListActivity {
 
 	private ListLugaresAdapter listLugaresAdapter;
 	Bundle extras = new Bundle();
@@ -139,9 +140,18 @@ public class ListLugares extends ListActivity {
 					Toast.LENGTH_SHORT).show();
 			return true;
 
+		case R.id.web_lugar:
+			lanzarWeb(lugar);
 		default:
 			return super.onOptionsItemSelected(item);
 		}
+	}
+
+	private void lanzarWeb(Lugar lugar) {
+		Intent i = new Intent(Intent.ACTION_VIEW);
+		i.setData(Uri.parse("http://"+lugar.getUrl()));
+		this.startActivity(i);
+		
 	}
 
 	private void eliminarLugarEnBd(Lugar lugar) {

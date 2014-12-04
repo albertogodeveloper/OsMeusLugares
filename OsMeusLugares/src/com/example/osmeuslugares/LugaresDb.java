@@ -3,7 +3,11 @@ package com.example.osmeuslugares;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Vector;
+
+import android.app.Activity;
 import android.content.Context;
+import android.content.res.Resources;
+import android.content.res.TypedArray;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
@@ -17,8 +21,13 @@ public class LugaresDb extends SQLiteOpenHelper {
 	private SQLiteDatabase db;
 	private static String nombre = "lugares.db";
 	private static CursorFactory factory = null;
-	private static int version = 2;
+	private static int version = 5;
 	private static String sql;
+
+	// Para iconos:
+	Resources res;
+	TypedArray drawableIconosLugares;
+	List<String> valoresIconosLugares;
 
 	public LugaresDb(Context context) {
 		super(context, nombre, factory, version);
@@ -33,9 +42,27 @@ public class LugaresDb extends SQLiteOpenHelper {
 			crearTablaCategoria(db);
 
 			insertarLugaresPrueba();
+
 		} catch (SQLException e) {
 			Log.e(getClass().toString(), e.getMessage());
 		}
+	}
+
+	private void cargarIconos(Activity activity) {
+		// Cargar recursos iconos
+		res = activity.getResources();
+		drawableIconosLugares = res.obtainTypedArray(R.array.iconos_lugares);
+		valoresIconosLugares = (List<String>) Arrays.asList(res
+				.getStringArray(R.array.valores_iconos_lugares));
+	}
+
+	public Drawable obtenDrawableIcon(String icon) {
+		// Buscamos la posici—n de icon
+		int posicion = valoresIconosLugares.indexOf(icon);
+		// -1 si no existe lo ponemos a 0 (icono ND: No Definido)
+		if (posicion == -1)
+			posicion = 0;
+		return drawableIconosLugares.getDrawable(posicion);
 	}
 
 	private void crearTablaLugar(SQLiteDatabase db) {
@@ -55,7 +82,8 @@ public class LugaresDb extends SQLiteOpenHelper {
 	private void crearTablaCategoria(SQLiteDatabase db) {
 		sql = "CREATE TABLE Categoria("
 				+ "cat_id INTEGER PRIMARY KEY AUTOINCREMENT, "
-				+ "cat_nombre TEXT NOT NULL, " + "cat_icono TEXT);";
+				+ "cat_nombre TEXT NOT NULL, " 
+				+ "cat_icono TEXT);";
 
 		db.execSQL(sql);
 
@@ -64,10 +92,10 @@ public class LugaresDb extends SQLiteOpenHelper {
 	}
 
 	private void insertarLugaresPrueba() {
-		db.execSQL("INSERT INTO Categoria(cat_nombre) " + "VALUES('Playas')");
-		db.execSQL("INSERT INTO Categoria(cat_nombre) " + "VALUES('Restaurantes')");
-		db.execSQL("INSERT INTO Categoria(cat_nombre) " + "VALUES('Hoteles')");
-		db.execSQL("INSERT INTO Categoria(cat_nombre) " + "VALUES('Otros')");
+		db.execSQL("INSERT INTO Categoria(cat_nombre,cat_icono) " + "VALUES('Playas','icono_playa')");
+		db.execSQL("INSERT INTO Categoria(cat_nombre,cat_icono) " + "VALUES('Restaurantes','icono_restaurante')");
+		db.execSQL("INSERT INTO Categoria(cat_nombre,cat_icono) " + "VALUES('Hoteles','icono_hotel')");
+		db.execSQL("INSERT INTO Categoria(cat_nombre,cat_icono) " + "VALUES('Otros','icono_otros')");
 
 		db.execSQL("INSERT INTO Lugar(lug_nombre, lug_categoria_id, lug_direccion, lug_ciudad, lug_telefono, lug_url, lug_comentario) "
 				+ "VALUES('Praia de Riazor',1, 'Riazor','A Coruña','981000000','www.praiariazor.com','Playa con mucho oleaje.')");
@@ -105,26 +133,38 @@ public class LugaresDb extends SQLiteOpenHelper {
 	public Vector<Lugar> cargarLugaresDesdeBD() {
 		Vector<Lugar> resultado = new Vector<Lugar>();
 		SQLiteDatabase db = this.getReadableDatabase();
-		Cursor cursor = db.rawQuery("SELECT Lugar.*, cat_nombre, cat_icono " + "FROM Lugar join Categoria on lug_categoria_id = cat_id",
+		Cursor cursor = db.rawQuery("SELECT Lugar.*, cat_nombre, cat_icono "
+				+ "FROM Lugar join Categoria on lug_categoria_id = cat_id",
 				null);
 		// Se podría usar query() en vez de rawQuery
-		// join para recoger nombre categoria, previamente crear tabla de categorias.
-		
+		// join para recoger nombre categoria, previamente crear tabla de
+		// categorias.
+
 		while (cursor.moveToNext()) {
 			Lugar lugar = new Lugar();
-			lugar.setId(cursor.getLong(0));//Por qué le asigna un cero?????????????????????????????????????
-			lugar.setNombre(cursor.getString(cursor.getColumnIndex(Lugar.C_NOMBRE)));
-			int idCategoria = cursor.getInt(cursor.getColumnIndex(Lugar.C_CATEGORIA_ID));
-			String nombreCategoria = cursor.getString(cursor.getColumnIndex(Categoria.C_NOMBRE));
-			String iconoCategoria = cursor.getString(cursor.getColumnIndex(Categoria.C_ICONO));
-			
-			lugar.setCategoria(new Categoria(idCategoria, nombreCategoria,iconoCategoria));
-			lugar.setDireccion(cursor.getString(cursor.getColumnIndex(Lugar.C_DIRECCION)));
-			lugar.setCiudad(cursor.getString(cursor.getColumnIndex(Lugar.C_CIUDAD)));
-			lugar.setTelefono(cursor.getString(cursor.getColumnIndex(Lugar.C_TELEFONO)));
+			lugar.setId(cursor.getLong(0));// Por qué le asigna un
+											// cero?????????????????????????????????????
+			lugar.setNombre(cursor.getString(cursor
+					.getColumnIndex(Lugar.C_NOMBRE)));
+			int idCategoria = cursor.getInt(cursor
+					.getColumnIndex(Lugar.C_CATEGORIA_ID));
+			String nombreCategoria = cursor.getString(cursor
+					.getColumnIndex(Categoria.C_NOMBRE));
+			String iconoCategoria = cursor.getString(cursor
+					.getColumnIndex(Categoria.C_ICONO));
+
+			lugar.setCategoria(new Categoria(idCategoria, nombreCategoria,
+					iconoCategoria));
+			lugar.setDireccion(cursor.getString(cursor
+					.getColumnIndex(Lugar.C_DIRECCION)));
+			lugar.setCiudad(cursor.getString(cursor
+					.getColumnIndex(Lugar.C_CIUDAD)));
+			lugar.setTelefono(cursor.getString(cursor
+					.getColumnIndex(Lugar.C_TELEFONO)));
 			lugar.setUrl(cursor.getString(cursor.getColumnIndex(Lugar.C_URL)));
-			lugar.setComentario(cursor.getString(cursor.getColumnIndex(Lugar.C_COMENTARIO)));
-			
+			lugar.setComentario(cursor.getString(cursor
+					.getColumnIndex(Lugar.C_COMENTARIO)));
+
 			resultado.add(lugar);
 		}
 		return resultado;
@@ -133,14 +173,18 @@ public class LugaresDb extends SQLiteOpenHelper {
 	public Vector<Categoria> cargarCategoriasDesdeBD() {
 		Vector<Categoria> resultado = new Vector<Categoria>();
 		SQLiteDatabase db = this.getReadableDatabase();
-		Cursor cursor = db.rawQuery("SELECT * FROM Categoria ORDER By cat_nombre", null);
+		Cursor cursor = db.rawQuery(
+				"SELECT * FROM Categoria ORDER By cat_nombre", null);
 		// Como es para un spinner incluir una primera opción por defecto
-		resultado.add(new Categoria(0, "Seleccionar...",null));
+		resultado.add(new Categoria(0, "Seleccionar...", "icono_nd"));
 		while (cursor.moveToNext()) {
 			Categoria categoria = new Categoria();
-			categoria.setId(cursor.getInt(cursor.getColumnIndex(Categoria.C_ID)));
-			categoria.setNombre(cursor.getString(cursor.getColumnIndex(Categoria.C_NOMBRE)));
-			categoria.setIcono(cursor.getString(cursor.getColumnIndex(Categoria.C_ICONO)));
+			categoria
+					.setId(cursor.getInt(cursor.getColumnIndex(Categoria.C_ID)));
+			categoria.setNombre(cursor.getString(cursor
+					.getColumnIndex(Categoria.C_NOMBRE)));
+			categoria.setIcono(cursor.getString(cursor
+					.getColumnIndex(Categoria.C_ICONO)));
 			resultado.add(categoria);
 		}
 		return resultado;
@@ -164,23 +208,30 @@ public class LugaresDb extends SQLiteOpenHelper {
 		// Eliminamos el registro de la base de datos.
 		db.delete("Lugar", "lug_id=" + lugarDel.getId(), null);
 	}
-	
-	
-//			// Cargar recursos iconos
-//			res = activity.getResources();
-//			drawableIconosLugares = res
-//					.obtainTypedArray(R.array.drawable_iconos_lugares);
-//			
-//			valoresIconosLugares = (List<String>) Arrays.asList(res
-//					.getStringArray(R.array.valores_iconos_lugares));
-//			
-//			//jjjjjjjjjjjjjjj
-//			public Drawable obtenDrawableIcon(String icon) {
-//				// Buscamos la posici—n de icon
-//				int posicion = valoresIconosLugares.indexOf(icon);
-//				// -1 si no existe lo ponemos a 0 (icono ND: No Definido)
-//				if (posicion == -1)
-//					posicion = 0;
-//				return drawableIconosLugares.getDrawable(posicion);
-//			}
+
+	// --------------------Para categorias------------------------------
+
+	public void createCategoria(Categoria newCategoria) {
+		SQLiteDatabase db = this.getWritableDatabase();
+		// Insertamos el registro en la base de datos
+		db.insert("Categoria", null, newCategoria.getContentValues());
+		Log.i(this.getClass().toString(),
+				"Agregada categoria con id="+newCategoria.toString());
+	}
+
+	public void updateCategoria(Categoria categoriaEdit) {
+		SQLiteDatabase db = this.getWritableDatabase();
+		// Actualizamos el registro en la base de datos
+		Log.i(this.getClass().toString(),
+				"Actualizando categoria con id="+categoriaEdit.getId());
+		db.update("Categoria", categoriaEdit.getContentValues(), "cat_id="
+				+ categoriaEdit.getId(), null);
+	}
+
+	public void deleteCategoria(Categoria categoriaDel) {
+		SQLiteDatabase db = this.getWritableDatabase();
+		// Eliminamos el registro de la base de datos.
+		db.delete("Categoria", "cat_id=" + categoriaDel.getId(), null);
+	}
+
 }

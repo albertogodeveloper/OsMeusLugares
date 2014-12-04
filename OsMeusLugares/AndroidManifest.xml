@@ -23,7 +23,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ListLugares"
+            android:name=".ListLugaresActivity"
             android:label="@string/title_activity_list_lugares" >
         </activity>
         <activity
@@ -37,6 +37,14 @@
         <activity
             android:name=".EditLugarActivity"
             android:label="@string/title_activity_edit_lugar" >
+        </activity>
+        <activity
+            android:name=".ListCategoriasActivity"
+            android:label="@string/title_activity_list_categorias" >
+        </activity>
+        <activity
+            android:name=".EditCategoriaActivity"
+            android:label="@string/title_activity_edit_categoria" >
         </activity>
     </application>
 
