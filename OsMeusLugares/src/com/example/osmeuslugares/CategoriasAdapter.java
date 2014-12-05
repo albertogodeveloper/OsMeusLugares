@@ -28,7 +28,7 @@ public class CategoriasAdapter extends BaseAdapter {
 
 	public void cargarDatosDesdeBd() throws SQLException{
 		lugaresDb = new LugaresDb(activity);
-		this.lista = lugaresDb.cargarCategoriasDesdeBD();
+		this.lista = lugaresDb.cargarCategoriasDesdeBD(true);
 	}
 	@Override
 	public int getCount() {

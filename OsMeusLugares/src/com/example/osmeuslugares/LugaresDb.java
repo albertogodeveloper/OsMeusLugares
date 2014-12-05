@@ -15,6 +15,7 @@ import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
 
 public class LugaresDb extends SQLiteOpenHelper {
 
@@ -23,11 +24,6 @@ public class LugaresDb extends SQLiteOpenHelper {
 	private static CursorFactory factory = null;
 	private static int version = 5;
 	private static String sql;
-
-	// Para iconos:
-	Resources res;
-	TypedArray drawableIconosLugares;
-	List<String> valoresIconosLugares;
 
 	public LugaresDb(Context context) {
 		super(context, nombre, factory, version);
@@ -48,23 +44,6 @@ public class LugaresDb extends SQLiteOpenHelper {
 		}
 	}
 
-	private void cargarIconos(Activity activity) {
-		// Cargar recursos iconos
-		res = activity.getResources();
-		drawableIconosLugares = res.obtainTypedArray(R.array.iconos_lugares);
-		valoresIconosLugares = (List<String>) Arrays.asList(res
-				.getStringArray(R.array.valores_iconos_lugares));
-	}
-
-	public Drawable obtenDrawableIcon(String icon) {
-		// Buscamos la posici—n de icon
-		int posicion = valoresIconosLugares.indexOf(icon);
-		// -1 si no existe lo ponemos a 0 (icono ND: No Definido)
-		if (posicion == -1)
-			posicion = 0;
-		return drawableIconosLugares.getDrawable(posicion);
-	}
-
 	private void crearTablaLugar(SQLiteDatabase db) {
 		sql = "CREATE TABLE lugar("
 				+ "lug_id INTEGER PRIMARY KEY AUTOINCREMENT, "
@@ -82,8 +61,7 @@ public class LugaresDb extends SQLiteOpenHelper {
 	private void crearTablaCategoria(SQLiteDatabase db) {
 		sql = "CREATE TABLE Categoria("
 				+ "cat_id INTEGER PRIMARY KEY AUTOINCREMENT, "
-				+ "cat_nombre TEXT NOT NULL, " 
-				+ "cat_icono TEXT);";
+				+ "cat_nombre TEXT NOT NULL, " + "cat_icono TEXT);";
 
 		db.execSQL(sql);
 
@@ -92,10 +70,14 @@ public class LugaresDb extends SQLiteOpenHelper {
 	}
 
 	private void insertarLugaresPrueba() {
-		db.execSQL("INSERT INTO Categoria(cat_nombre,cat_icono) " + "VALUES('Playas','icono_playa')");
-		db.execSQL("INSERT INTO Categoria(cat_nombre,cat_icono) " + "VALUES('Restaurantes','icono_restaurante')");
-		db.execSQL("INSERT INTO Categoria(cat_nombre,cat_icono) " + "VALUES('Hoteles','icono_hotel')");
-		db.execSQL("INSERT INTO Categoria(cat_nombre,cat_icono) " + "VALUES('Otros','icono_otros')");
+		db.execSQL("INSERT INTO Categoria(cat_nombre,cat_icono) "
+				+ "VALUES('Playas','icono_playa')");
+		db.execSQL("INSERT INTO Categoria(cat_nombre,cat_icono) "
+				+ "VALUES('Restaurantes','icono_restaurante')");
+		db.execSQL("INSERT INTO Categoria(cat_nombre,cat_icono) "
+				+ "VALUES('Hoteles','icono_hotel')");
+		db.execSQL("INSERT INTO Categoria(cat_nombre,cat_icono) "
+				+ "VALUES('Otros','icono_otros')");
 
 		db.execSQL("INSERT INTO Lugar(lug_nombre, lug_categoria_id, lug_direccion, lug_ciudad, lug_telefono, lug_url, lug_comentario) "
 				+ "VALUES('Praia de Riazor',1, 'Riazor','A Coruña','981000000','www.praiariazor.com','Playa con mucho oleaje.')");
@@ -170,13 +152,16 @@ public class LugaresDb extends SQLiteOpenHelper {
 		return resultado;
 	}
 
-	public Vector<Categoria> cargarCategoriasDesdeBD() {
+	public Vector<Categoria> cargarCategoriasDesdeBD(boolean opcSeleccionar) {
 		Vector<Categoria> resultado = new Vector<Categoria>();
 		SQLiteDatabase db = this.getReadableDatabase();
 		Cursor cursor = db.rawQuery(
 				"SELECT * FROM Categoria ORDER By cat_nombre", null);
-		// Como es para un spinner incluir una primera opción por defecto
-		resultado.add(new Categoria(0, "Seleccionar...", "icono_nd"));
+		if (opcSeleccionar) {
+			// Como es para un spinner incluir una primera opción por defecto
+			resultado.add(new Categoria(0, "Seleccionar...", "icono_nd"));
+		}
+
 		while (cursor.moveToNext()) {
 			Categoria categoria = new Categoria();
 			categoria
@@ -215,15 +200,15 @@ public class LugaresDb extends SQLiteOpenHelper {
 		SQLiteDatabase db = this.getWritableDatabase();
 		// Insertamos el registro en la base de datos
 		db.insert("Categoria", null, newCategoria.getContentValues());
-		Log.i(this.getClass().toString(),
-				"Agregada categoria con id="+newCategoria.toString());
+		Log.i(this.getClass().toString(), "Agregada categoria con id="
+				+ newCategoria.toString());
 	}
 
 	public void updateCategoria(Categoria categoriaEdit) {
 		SQLiteDatabase db = this.getWritableDatabase();
 		// Actualizamos el registro en la base de datos
-		Log.i(this.getClass().toString(),
-				"Actualizando categoria con id="+categoriaEdit.getId());
+		Log.i(this.getClass().toString(), "Actualizando categoria con id="
+				+ categoriaEdit.getId());
 		db.update("Categoria", categoriaEdit.getContentValues(), "cat_id="
 				+ categoriaEdit.getId(), null);
 	}

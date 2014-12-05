@@ -1,5 +1,7 @@
 package com.example.osmeuslugares;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Vector;
 
 import android.app.Activity;
@@ -7,6 +9,7 @@ import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.database.SQLException;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +22,8 @@ public class ListLugaresAdapter extends BaseAdapter {
 	private final Activity activity;
 	private Vector<Lugar> lista;
 	private LugaresDb lugaresDb;
+	private RecursoIcono recursoIcono;
+	
 
 	public ListLugaresAdapter(Activity activity) {
 		super();
@@ -26,7 +31,11 @@ public class ListLugaresAdapter extends BaseAdapter {
 		this.lista = new Vector<Lugar>();
 		lugaresDb = new LugaresDb(activity);
 		actualizarDesdeDb();
+		this.recursoIcono = new RecursoIcono(activity);
+		
 	}
+
+	
 
 	public void actualizarDesdeDb() throws SQLException {
 		this.lista = lugaresDb.cargarLugaresDesdeBD();
@@ -57,7 +66,8 @@ public class ListLugaresAdapter extends BaseAdapter {
 	}
 
 	private void cargaDatos(int position, View view) {
-		TextView textViewTitulo = (TextView) view.findViewById(R.id.textViewTitulo);
+		TextView textViewTitulo = (TextView) view
+				.findViewById(R.id.textViewTitulo);
 		TextView txtNombre = (TextView) view.findViewById(R.id.tvNombre);
 		TextView txtLugar = (TextView) view.findViewById(R.id.tvTipo);
 		TextView txtDireccion = (TextView) view.findViewById(R.id.tvDireccion);
@@ -67,27 +77,12 @@ public class ListLugaresAdapter extends BaseAdapter {
 		TextView txtComent = (TextView) view.findViewById(R.id.tvComentario);
 
 		Lugar lugar = (Lugar) lista.elementAt(position);
-		int id = lugar.getCategoria().getId();
-		ImageView icono = (ImageView) view.findViewById(R.id.icono);
 		
-		//Iconos del xml...............................
-		lugar.getCategoria().getIcono();
+		ImageView imgViewIcono = (ImageView) view.findViewById(R.id.icono);
+		Log.i(this.getClass().toString(),"ICONO OBTENIDO DE LA CATEGORIA= "+lugar.getCategoria().getIcono());
+		Drawable icon = recursoIcono.obtenerDrawableIcon(lugar.getCategoria().getIcono());
+		imgViewIcono.setImageDrawable(icon);
 		
-		switch (id) {
-		case 1:
-			icono.setImageResource(R.drawable.ic_playas);
-			break;
-		case 2:
-			icono.setImageResource(R.drawable.ic_restaurantes);
-			break;
-		case 3:
-			icono.setImageResource(R.drawable.ic_hoteles);
-			break;
-		default:
-			icono.setImageResource(R.drawable.ic_otros);
-			break;
-		}
-
 		textViewTitulo.setText(lugar.getNombre());
 		txtNombre.setText(lugar.getNombre());
 		txtLugar.setText(lugar.getCategoria().getNombre());
@@ -97,13 +92,6 @@ public class ListLugaresAdapter extends BaseAdapter {
 		txtTelf.setText(lugar.getTelefono());
 		txtComent.setText(lugar.getComentario());
 	}
-	
-	private Drawable obtenerDrawableIcon(String icon) {
-		Resources res = activity.getResources();
-		TypedArray iconosLugares = res.obtainTypedArray(R.array.iconos_lugares);
 
-		TypedArray nombresIconos = res.obtainTypedArray(R.array.lista_tipos);
-		//Obtener la posición de icon en el array.
-		return iconosLugares.getDrawable(0);
-	}
+	
 }
