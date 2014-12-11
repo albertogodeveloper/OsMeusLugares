@@ -52,5 +52,8 @@
     <string name="edit_categoria">Editar Categoria</string>
     <string name="del_categoria">Eliminar Categoria</string>
     <string name="ir_web">Ir a web</string>
+    <string name="marcar_telefono">Marcar teléfono</string>
+	<string name="coordenadas_gps">Coordenadas GPS</string>
+	<string name="enviar_por_email">Enviar por email</string>
 
 </resources>

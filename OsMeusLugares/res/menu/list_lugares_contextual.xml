@@ -1,7 +1,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.example.osmeuslugares.ListLugares" >
-
+ 	<item android:id="@+id/marcar_telefono_lugar" android:title="@string/marcar_telefono"></item>
+	<item android:id="@+id/enviar_por_email" android:title="@string/enviar_por_email"></item>
     <item android:id="@+id/web_lugar" android:title="@string/ir_web" android:showAsAction="always" android:orderInCategory="1"></item><item
         android:id="@+id/edit_lugar"
         android:orderInCategory="2"

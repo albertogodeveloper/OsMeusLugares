@@ -3,6 +3,7 @@ package com.example.osmeuslugares;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -93,16 +94,20 @@ public class ListLugaresActivity extends ListActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		int id = item.getItemId();
 		switch (id) {
-		case R.id.add_lugar: {
+		case R.id.add_lugar:
 			extras.clear();
 			extras.putBoolean("add", true);
 			lanzarEditLugar(extras);
 			return true;
-		}
-		case R.id.cerrar: {
+
+		case R.id.mi_localizacion:
+			lanzarCoordenadas();
+			return true;
+
+		case R.id.cerrar:
 			finish();
 			break;
-		}
+
 		}
 
 		return super.onOptionsItemSelected(item);
@@ -118,8 +123,9 @@ public class ListLugaresActivity extends ListActivity {
 
 	@Override
 	public boolean onContextItemSelected(MenuItem item) {
-		AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
-		 // Obtiene el lugar seleccionado:
+		AdapterContextMenuInfo info = (AdapterContextMenuInfo) item
+				.getMenuInfo();
+		// Obtiene el lugar seleccionado:
 		Lugar lugar = (Lugar) listLugaresAdapter.getItem(info.position);
 
 		switch (item.getItemId()) {
@@ -131,7 +137,9 @@ public class ListLugaresActivity extends ListActivity {
 			// Lanzo editar lugar con el elemento en un bundle:
 			lanzarEditLugar(extras);
 			// Muestro un toast con el nombre del elemento a editar:
-			Toast.makeText(getBaseContext(), "Editar: " + lugar.getNombre(),Toast.LENGTH_SHORT).show();
+			Toast.makeText(getBaseContext(), "Editar: " + lugar.getNombre(),
+					Toast.LENGTH_SHORT).show();
+
 			return true;
 
 		case R.id.delete_lugar:
@@ -141,17 +149,55 @@ public class ListLugaresActivity extends ListActivity {
 			return true;
 
 		case R.id.web_lugar:
-			lanzarWeb(lugar);
+			if (lugar.getUrl().isEmpty()) {
+				Toast.makeText(getBaseContext(), "No hay dirección",
+						Toast.LENGTH_SHORT).show();
+			} else {
+				lanzarWeb(lugar);
+			}
+			return true;
+		case R.id.marcar_telefono_lugar:
+			lanzarMarcarTelefono(lugar.getTelefono());
+			return true;
+		case R.id.enviar_por_email:
+			lanzarEmail(lugar);
 		default:
 			return super.onOptionsItemSelected(item);
 		}
 	}
 
+	private void lanzarCoordenadas() {
+		CoordenadasGPS coordenadasGPS = new CoordenadasGPS(this);
+		Location localizacion = coordenadasGPS.getLocalizacion();
+		Toast.makeText(getBaseContext(),
+				"Coordenadas acutales: " + localizacion.toString(),
+				Toast.LENGTH_SHORT).show();
+	}
+
+	private void lanzarEmail(Lugar lugar) {
+		Intent i = new Intent(Intent.ACTION_SEND);
+		i.setType("message/rfc822");
+		String[] to = { "lag@fernandowirtz.com" };
+		String subject = "Lugar " + lugar.getNombre();
+		String body = lugar.toString();
+		i.putExtra(Intent.EXTRA_EMAIL, to);
+		i.putExtra(Intent.EXTRA_SUBJECT, subject);
+		i.putExtra(Intent.EXTRA_TEXT, body);
+		startActivity(i);
+	}
+
+	private void lanzarMarcarTelefono(String telefono) {
+		if (!telefono.isEmpty()) {
+			Intent i = new Intent(Intent.ACTION_DIAL);
+			i.setData(Uri.parse("tel:" + telefono));
+			startActivity(i);
+		}
+	}
+
 	private void lanzarWeb(Lugar lugar) {
 		Intent i = new Intent(Intent.ACTION_VIEW);
-		i.setData(Uri.parse("http://"+lugar.getUrl()));
+		i.setData(Uri.parse("http://" + lugar.getUrl()));
 		this.startActivity(i);
-		
 	}
 
 	private void eliminarLugarEnBd(Lugar lugar) {
