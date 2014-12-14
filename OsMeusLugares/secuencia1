@@ -1,0 +1,21 @@
+@startuml
+
+title __Os Meus Lugares__\Secuencia
+create MainActivity
+note over MainActivity
+ activity_main.xml
+end note
+
+create ListLugares
+note over ListLugares
+ activity_list_lugares.xml
+end note
+MainActivity -> ListLugares: menu (intent)
+create ListLugaresAdapter
+ListLugares -> ListLugaresAdapter: OnCreate:setAdpater
+ListLugares -> ListLugaresAdapter: OnCreate:abrir()
+create LugaresDb
+ListLugaresAdapter -> LugaresDb: cargarListadoLugaresDesdeBD
+ListLugaresAdapter <-> ListLugares: getView(): implicito
+
+@enduml

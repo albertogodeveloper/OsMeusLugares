@@ -14,33 +14,39 @@ import android.widget.Toast;
 
 public class MainActivity extends Activity {
 
+	/**
+	 * Atributos.
+	 */
 	LugaresDb lugaresDb;
 	MediaPlayer musica;
 
+	/**
+	 * Al crear el Activity cargamos la base y la música.
+	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		try {
 			lugaresDb = new LugaresDb(getBaseContext());
+			Toast.makeText(getBaseContext(), "Base de datos preparada",
+					Toast.LENGTH_LONG).show();
+			this.musica = MediaPlayer.create(this, R.raw.musica_fondo);
 		} catch (Exception e) {
 			Log.e(getClass().toString(), e.getMessage());
 		}
-
-		Toast.makeText(getBaseContext(), "Base de datos preparada",
-				Toast.LENGTH_LONG).show();
-		
-		this.musica= MediaPlayer.create(this, R.raw.musica_fondo);
-		
 	}
 
+	/**
+	 * Activa o desactiva la música según la preferencia.
+	 */
 	private void leerPreferenciaMusica() {
 		/* Leer preferencia de música */
 		boolean reproducirMusica = getPreferenciaMusica();
 		if (reproducirMusica) {
 			Toast.makeText(getBaseContext(), "Música ON", Toast.LENGTH_LONG)
 					.show();
-			this.musica= MediaPlayer.create(this, R.raw.musica_fondo);
+			this.musica = MediaPlayer.create(this, R.raw.musica_fondo);
 			musica.start();
 		} else {
 			Toast.makeText(getBaseContext(), "Musica OFF", Toast.LENGTH_LONG)
@@ -49,36 +55,59 @@ public class MainActivity extends Activity {
 		}
 	}
 
+	/**
+	 * Devuelve el valor de la preferencia música.
+	 * 
+	 * @return
+	 */
 	public boolean getPreferenciaMusica() {
 		SharedPreferences preferencias = PreferenceManager
 				.getDefaultSharedPreferences(getBaseContext());
 		return preferencias.getBoolean("musica", false);
+	}
+
+	/**
+	 * Lanza el ListLugaresActivity.
+	 * 
+	 * @param v
+	 */
+	public void onButtonClickLugar(View v) {
+		lanzarListadoLugares();
+	}
+
+	/**
+	 * Lanza Preferencias.
+	 */
+	private void lanzarPrefencias() {
+		Intent i = new Intent(this, PreferenciasActivity.class);
+		startActivity(i);
 
 	}
 
-	public void onButtonClickLugar(View v) {
-
+	/**
+	 * Lanza el listado de lugares.
+	 */
+	private void lanzarListadoLugares() {
 		Intent i = new Intent(this, ListLugaresActivity.class);
 		startActivity(i);
-	}
-	
 
-	/* (non-Javadoc)
-	 * @see android.app.Activity#onStart()
-	 */
-	@Override
-	protected void onStart() {
-		leerPreferenciaMusica();
-		super.onStart();
 	}
 
-	/* (non-Javadoc)
-	 * @see android.app.Activity#onStop()
+	/**
+	 * Lanza el listado de categorías.
 	 */
-	@Override
-	protected void onStop() {
-		musica.stop();
-		super.onStop();
+	private void lanzarListadoCategorias() {
+		Intent i = new Intent(this, ListCategoriasActivity.class);
+		startActivity(i);
+	}
+
+	/**
+	 * Lanza acerca de.
+	 */
+	private void lanzarAcercaDe() {
+		Intent i = new Intent(this, AcercaDeActivity.class);
+		startActivity(i);
+
 	}
 
 	@Override
@@ -99,10 +128,11 @@ public class MainActivity extends Activity {
 		case R.id.listLugares: {
 			lanzarListadoLugares();
 			break;
-		}case R.id.listCategorias: {
+		}
+		case R.id.listCategorias: {
 			lanzarListadoCategorias();
 			break;
-		}		
+		}
 		case R.id.action_settings: {
 			lanzarPrefencias();
 			break;
@@ -115,27 +145,21 @@ public class MainActivity extends Activity {
 		return super.onOptionsItemSelected(item);
 	}
 
-	
-
-	private void lanzarPrefencias() {
-		Intent i = new Intent(this, PreferenciasActivity.class);
-		startActivity(i);
-
+	/**
+	 * Al iniciar se le la preferencia música.
+	 */
+	@Override
+	protected void onStart() {
+		super.onStart();
+		leerPreferenciaMusica();
 	}
 
-	private void lanzarListadoLugares() {
-		Intent i = new Intent(this, ListLugaresActivity.class);
-		startActivity(i);
-
-	}
-	private void lanzarListadoCategorias() {
-		Intent i = new Intent(this, ListCategoriasActivity.class);
-		startActivity(i);		
-	}
-
-	private void lanzarAcercaDe() {
-		Intent i = new Intent(this, AcercaDeActivity.class);
-		startActivity(i);
-
+	/**
+	 * Cuando se para la actividad se para la música.
+	 */
+	@Override
+	protected void onStop() {
+		super.onStop();
+		musica.stop();
 	}
 }

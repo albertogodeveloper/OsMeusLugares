@@ -4,6 +4,9 @@ import android.content.ContentValues;
 import android.os.Bundle;
 
 public class Lugar {
+	/**
+	 * Atributos.
+	 */
 	private Long id;
 	private String nombre;// obligatorio
 	private Categoria categoria;// obligatorio
@@ -152,14 +155,13 @@ public class Lugar {
 		this.comentario = comentario;
 	}
 
-	@Override
-	public String toString() {
-		return "Lugar [id=" + id + ", nombre=" + nombre + ", categoria="
-				+ categoria.toString() + ", direccion=" + direccion
-				+ ", ciudad=" + ciudad + ", url=" + url + ", telefono="
-				+ telefono + ", comentario=" + comentario + "]";
-	}
-
+	/**
+	 * Esta colección es de tipo diccionario, donde almacenaremos parejas de
+	 * clave-valor, donde la clave será el nombre de cada campo y el valor será
+	 * el dato correspondiente a insertar en dicho campo.
+	 * 
+	 * @return
+	 */
 	ContentValues getContentValues() {
 		ContentValues reg = new ContentValues();
 		reg.put(C_NOMBRE, nombre);
@@ -172,6 +174,12 @@ public class Lugar {
 		return reg;
 	}
 
+	/**
+	 * Contiene una lista de pares clave-valor con toda la información a pasar
+	 * entre las actividades.
+	 * 
+	 * @return
+	 */
 	Bundle getBundle() {
 		Bundle bundle = new Bundle();
 		bundle.putLong(C_ID, id);
@@ -187,14 +195,30 @@ public class Lugar {
 		return bundle;
 	}
 
+	/**
+	 * Crea una lista de pares clave-valor con toda la información a pasar entre
+	 * las actividades.
+	 * 
+	 * @return
+	 */
 	void setBundle(Bundle bundle) {
 		id = bundle.getLong(C_ID);
 		nombre = bundle.getString(C_NOMBRE);
-		categoria = new Categoria(bundle.getInt(C_CATEGORIA_ID),bundle.getString(Categoria.C_NOMBRE),bundle.getString(Categoria.C_ICONO));
+		categoria = new Categoria(bundle.getInt(C_CATEGORIA_ID),
+				bundle.getString(Categoria.C_NOMBRE),
+				bundle.getString(Categoria.C_ICONO));
 		ciudad = bundle.getString(C_CIUDAD);
 		direccion = bundle.getString(C_DIRECCION);
 		url = bundle.getString(C_URL);
 		telefono = bundle.getString(C_TELEFONO);
 		comentario = bundle.getString(C_COMENTARIO);
+	}
+
+	@Override
+	public String toString() {
+		return "Lugar [id=" + id + ", nombre=" + nombre + ", categoria="
+				+ categoria.toString() + ", direccion=" + direccion
+				+ ", ciudad=" + ciudad + ", url=" + url + ", telefono="
+				+ telefono + ", comentario=" + comentario + "]";
 	}
 }

@@ -19,70 +19,56 @@ import android.widget.AdapterView.AdapterContextMenuInfo;
 
 public class ListLugaresActivity extends ListActivity {
 
+	/**
+	 * Atributos.
+	 */
+	private LugaresDb db;
 	private ListLugaresAdapter listLugaresAdapter;
 	Bundle extras = new Bundle();
-	private LugaresDb db = new LugaresDb(this);
-
+	Sonidos sonidos;
+	
+	/**
+	 * Se crea un adaptador para la lista y se le asigna. Se registra el menú
+	 * contextual.
+	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_list_lugares);
-		registerForContextMenu(super.getListView());
 
+		db = new LugaresDb(this);
 		listLugaresAdapter = new ListLugaresAdapter(this);
 		setListAdapter(listLugaresAdapter);
-
+		registerForContextMenu(super.getListView());
 		leerPreferenciaInfo();
+		sonidos = new Sonidos(this);
 	}
 
-	private void leerPreferenciaInfo() {
-		/* Leer preferencia de info */
-		boolean infoAmpliada = getPreferenciaVerInfoAmpliada();
-		if (infoAmpliada) {
-			Toast.makeText(getBaseContext(), "Info Ampliada ON",
-					Toast.LENGTH_LONG).show();
-		} else {
-			Toast.makeText(getBaseContext(), "Info Ampliada OFF",
-					Toast.LENGTH_LONG).show();
-		}
-	}
-
-	public boolean getPreferenciaVerInfoAmpliada() {
-		SharedPreferences preferencias = PreferenceManager
-				.getDefaultSharedPreferences(getBaseContext());
-		return preferencias.getBoolean("ver_info_ampliada", false);
-
-	}
-
+	/**
+	 * Obtiene el elemento clickeado y lo guarda en un bundle, lanza editLugar
+	 * con el bundle.
+	 */
 	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {
 		super.onListItemClick(l, v, position, id);
+		sonidos.playSonido1();
 		Lugar itemLugar = (Lugar) getListAdapter().getItem(position);
 		Bundle extras = itemLugar.getBundle();
-		extras.putBoolean("add", false);
+		extras.putBoolean("add", false);// Para que editLugar sepa que es una
+										// edición.
 		lanzarEditLugar(extras);
 	}
 
+	/**
+	 * Lanza editLugar con el bundle.
+	 * 
+	 * @param extras
+	 */
 	private void lanzarEditLugar(Bundle extras) {
 		Intent i = new Intent(this, EditLugarActivity.class);
 		i.putExtras(extras);
 		startActivity(i);
-		// startActivityForResult(i, 1234); //Preguntar a
-		// Gabino..................................................................
 	}
-
-	// @Override
-	// protected void onActivityResult(int requestCode, int resultCode, Intent
-	// data) {
-	// // TODO Auto-generated method stub
-	// super.onActivityResult(requestCode, resultCode, data);
-	// if (requestCode == 1234 && resultCode == RESULT_OK) {
-	// String resultado = data.getExtras().getString("resultado");
-	// Toast.makeText(getBaseContext(), resultado, Toast.LENGTH_LONG)
-	// .show();
-	//
-	// }
-	// }
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -90,13 +76,17 @@ public class ListLugaresActivity extends ListActivity {
 		return true;
 	}
 
+	/**
+	 * Barra de menu.
+	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		int id = item.getItemId();
 		switch (id) {
 		case R.id.add_lugar:
-			extras.clear();
-			extras.putBoolean("add", true);
+			extras.clear();// Limpia el bundle.
+			extras.putBoolean("add", true);// Para que editLugar sepa que es una
+											// creación.
 			lanzarEditLugar(extras);
 			return true;
 
@@ -109,10 +99,12 @@ public class ListLugaresActivity extends ListActivity {
 			break;
 
 		}
-
 		return super.onOptionsItemSelected(item);
 	}
 
+	/**
+	 * Menú contextual.
+	 */
 	@Override
 	public void onCreateContextMenu(ContextMenu menu, View v,
 			ContextMenuInfo menuInfo) {
@@ -121,6 +113,9 @@ public class ListLugaresActivity extends ListActivity {
 		inflater.inflate(R.menu.list_lugares_contextual, menu);
 	}
 
+	/**
+	 * Seleccionado en el menú contextual...
+	 */
 	@Override
 	public boolean onContextItemSelected(MenuItem item) {
 		AdapterContextMenuInfo info = (AdapterContextMenuInfo) item
@@ -129,7 +124,24 @@ public class ListLugaresActivity extends ListActivity {
 		Lugar lugar = (Lugar) listLugaresAdapter.getItem(info.position);
 
 		switch (item.getItemId()) {
-		case R.id.edit_lugar:
+		case R.id.ir_web_lugar:
+			if (lugar.getUrl().isEmpty() || lugar.getUrl() == "") {
+				Toast.makeText(getBaseContext(), "No hay dirección",
+						Toast.LENGTH_SHORT).show();
+			} else {
+				lanzarWeb(lugar);
+			}
+			return true;
+
+		case R.id.ir_marcar_telefono_lugar:
+			lanzarMarcarTelefono(lugar.getTelefono());
+			return true;
+
+		case R.id.ir_enviar_por_email:
+			lanzarEmail(lugar);
+			return true;
+
+		case R.id.ir_edit_lugar:
 			// Paso el lugar seleccionado a un bundle:
 			Bundle extras = lugar.getBundle();
 			// Le paso un false para que sepa que es para editar y no crear:
@@ -139,41 +151,53 @@ public class ListLugaresActivity extends ListActivity {
 			// Muestro un toast con el nombre del elemento a editar:
 			Toast.makeText(getBaseContext(), "Editar: " + lugar.getNombre(),
 					Toast.LENGTH_SHORT).show();
-
 			return true;
 
-		case R.id.delete_lugar:
+		case R.id.ir_delete_lugar:
 			eliminarLugarEnBd(lugar);
 			Toast.makeText(getBaseContext(), "Eliminar: " + lugar.getNombre(),
 					Toast.LENGTH_SHORT).show();
 			return true;
 
-		case R.id.web_lugar:
-			if (lugar.getUrl().isEmpty()) {
-				Toast.makeText(getBaseContext(), "No hay dirección",
-						Toast.LENGTH_SHORT).show();
-			} else {
-				lanzarWeb(lugar);
-			}
-			return true;
-		case R.id.marcar_telefono_lugar:
-			lanzarMarcarTelefono(lugar.getTelefono());
-			return true;
-		case R.id.enviar_por_email:
-			lanzarEmail(lugar);
 		default:
 			return super.onOptionsItemSelected(item);
 		}
 	}
 
-	private void lanzarCoordenadas() {
-		CoordenadasGPS coordenadasGPS = new CoordenadasGPS(this);
-		Location localizacion = coordenadasGPS.getLocalizacion();
-		Toast.makeText(getBaseContext(),
-				"Coordenadas acutales: " + localizacion.toString(),
-				Toast.LENGTH_SHORT).show();
+	/**
+	 * Elimina un lugar de la bd y reinicia la actividad.
+	 * 
+	 * @param lugar
+	 */
+	private void eliminarLugarEnBd(Lugar lugar) {
+		db.deleteLugar(lugar);
+		Toast.makeText(getBaseContext(), "ELIMINADO CORRECTAMENTE",
+				Toast.LENGTH_LONG).show();
+		onRestart();
 	}
 
+	/**
+	 * Muestra las coordenadas...
+	 */
+	private void lanzarCoordenadas() {// No funciona...
+		CoordenadasGPS coordenadasGPS;
+		Location localizacion;
+		try {
+			coordenadasGPS = new CoordenadasGPS(this);
+			localizacion = coordenadasGPS.getLocalizacion();
+			Toast.makeText(getBaseContext(),
+					"Coordenadas acutales: " + localizacion.toString(),
+					Toast.LENGTH_SHORT).show();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Para enviar por correo información de un lugar.
+	 * 
+	 * @param lugar
+	 */
 	private void lanzarEmail(Lugar lugar) {
 		Intent i = new Intent(Intent.ACTION_SEND);
 		i.setType("message/rfc822");
@@ -186,6 +210,11 @@ public class ListLugaresActivity extends ListActivity {
 		startActivity(i);
 	}
 
+	/**
+	 * Para marcar el nº de telf.
+	 * 
+	 * @param telefono
+	 */
 	private void lanzarMarcarTelefono(String telefono) {
 		if (!telefono.isEmpty()) {
 			Intent i = new Intent(Intent.ACTION_DIAL);
@@ -194,24 +223,50 @@ public class ListLugaresActivity extends ListActivity {
 		}
 	}
 
+	/**
+	 * Para lanzar en navegador con la web del lugar.
+	 * 
+	 * @param lugar
+	 */
 	private void lanzarWeb(Lugar lugar) {
 		Intent i = new Intent(Intent.ACTION_VIEW);
 		i.setData(Uri.parse("http://" + lugar.getUrl()));
 		this.startActivity(i);
 	}
 
-	private void eliminarLugarEnBd(Lugar lugar) {
-		db.deleteLugar(lugar);
-		Toast.makeText(getBaseContext(), "ELIMINADO CORRECTAMENTE",
-				Toast.LENGTH_LONG).show();
-		onRestart();
+	/**
+	 * Lee la preferencia de InfoAmpliada
+	 */
+	private void leerPreferenciaInfo() {
+		/* Leer preferencia de info */
+		boolean infoAmpliada = getPreferenciaVerInfoAmpliada();
+		if (infoAmpliada) {
+			Toast.makeText(getBaseContext(), "Info Ampliada ON",
+					Toast.LENGTH_LONG).show();
+		} else {
+			Toast.makeText(getBaseContext(), "Info Ampliada OFF",
+					Toast.LENGTH_LONG).show();
+		}
 	}
 
+	/**
+	 * Devuelve el valor de la pref. info Ampliada
+	 * 
+	 * @return
+	 */
+	public boolean getPreferenciaVerInfoAmpliada() {
+		SharedPreferences preferencias = PreferenceManager
+				.getDefaultSharedPreferences(getBaseContext());
+		return preferencias.getBoolean("ver_info_ampliada", false);
+	}
+
+	/**
+	 * Al volver a la actividad recarga la lista.
+	 */
 	@Override
 	protected void onRestart() {
 		super.onRestart();
 		listLugaresAdapter.actualizarDesdeDb();
 		listLugaresAdapter.notifyDataSetChanged();
 	}
-
 }

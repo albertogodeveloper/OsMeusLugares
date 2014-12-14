@@ -15,10 +15,16 @@ import android.widget.AdapterView.AdapterContextMenuInfo;
 
 public class ListCategoriasActivity extends ListActivity {
 
+	/**
+	 * Atributos.
+	 */
 	private ListCategoriasAdapter listCategoriasAdapter;
 	private LugaresDb db;
 	Bundle extras;
 
+	/**
+	 * Asigna el adapter de categorías. 
+	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -27,14 +33,16 @@ public class ListCategoriasActivity extends ListActivity {
 		db = new LugaresDb(this);
 		extras = new Bundle();
 		listCategoriasAdapter = new ListCategoriasAdapter(this);
-		setListAdapter(listCategoriasAdapter);
+		this.setListAdapter(listCategoriasAdapter);
 	}
 
+	/**
+	 * Obtiene el elemento pulsado y entra en modo edición.
+	 */
 	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {
 		super.onListItemClick(l, v, position, id);
-		Categoria categoria = (Categoria) listCategoriasAdapter
-				.getItem(position);
+		Categoria categoria = (Categoria) listCategoriasAdapter.getItem(position);
 		Bundle extras = categoria.getBundle();
 		extras.putBoolean("add", false);
 		lanzarEditCategoria(extras);
@@ -42,11 +50,13 @@ public class ListCategoriasActivity extends ListActivity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.list_categorias, menu);
 		return true;
 	}
 
+	/**
+	 * Menú con el botón añadir y cerrar.
+	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		int id = item.getItemId();
@@ -65,6 +75,9 @@ public class ListCategoriasActivity extends ListActivity {
 		return super.onOptionsItemSelected(item);
 	}
 
+	/**
+	 * Crea el menú contextual.
+	 */
 	@Override
 	public void onCreateContextMenu(ContextMenu menu, View v,
 			ContextMenuInfo menuInfo) {
@@ -72,7 +85,9 @@ public class ListCategoriasActivity extends ListActivity {
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.list_categorias_contextual, menu);
 	}
-
+/**
+ * Lo que se seleccione en el menú contextual...
+ */
 	@Override
 	public boolean onContextItemSelected(MenuItem item) {
 		AdapterContextMenuInfo info = (AdapterContextMenuInfo) item
@@ -107,6 +122,10 @@ public class ListCategoriasActivity extends ListActivity {
 		}
 	}
 
+	/**
+	 * Elimina una categoría de la bd.
+	 * @param categoria
+	 */
 	private void eliminarCategoriaEnBd(Categoria categoria) {
 		db.deleteCategoria(categoria);
 		Toast.makeText(getBaseContext(), "ELIMINADA CORRECTAMENTE",
@@ -114,6 +133,10 @@ public class ListCategoriasActivity extends ListActivity {
 		onRestart();
 	}
 
+	/**
+	 * Lanza editarCategoriaActivity
+	 * @param extras
+	 */
 	private void lanzarEditCategoria(Bundle extras) {
 		Intent i = new Intent(this, EditCategoriaActivity.class);
 		i.putExtras(extras);
@@ -121,6 +144,9 @@ public class ListCategoriasActivity extends ListActivity {
 
 	}
 
+	/**
+	 * Recarga la lista
+	 */
 	@Override
 	protected void onRestart() {
 		super.onRestart();

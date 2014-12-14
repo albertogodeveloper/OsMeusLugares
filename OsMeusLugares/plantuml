@@ -1,8 +1,9 @@
 @startuml
-
 (*) --> MainActivity
-MainActivity --> ListLugares
-MainActivity --> AcercaDe
-MainActivity --> Preferencias
-ListLugares --> EditLugar
+MainActivity --> ListLugaresActivity
+MainActivity --> AcercaDeActivity
+MainActivity --> PreferenciasActivity
+ListLugaresActivity --> EditLugarActivity
+
+
 @enduml
